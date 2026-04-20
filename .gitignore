@@ -1,3 +1,32 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+.DS_Store
+
+# Prisma
+apps/api/prisma/migrations/*.sql
+
+# Generated
+apps/api/src/generated/
+
+# Docker volumes (not committed)
+infra/docker/volumes/
+
+# IDE
+.idea/
+.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Test output
+coverage/
+.vitest/
+=======
 # Logs
 logs
 *.log
