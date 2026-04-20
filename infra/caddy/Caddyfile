@@ -1,0 +1,41 @@
+# Mars-ari LMS — Caddy reverse proxy with auto TLS
+# Replace yourdomain.com with your actual domain
+
+yourdomain.com {
+    # Web frontend
+    handle /* {
+        reverse_proxy mars-ari-web:80
+    }
+
+    # API
+    handle /api/* {
+        reverse_proxy mars-ari-api:3001
+    }
+
+    # Keycloak SSO
+    handle /auth/* {
+        reverse_proxy mars-ari-keycloak:8080
+    }
+
+    # OpenSearch Dashboards (admin only — add IP allowlist in prod)
+    handle /opensearch-dashboards/* {
+        reverse_proxy mars-ari-opensearch:5601
+    }
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100mb
+            roll_keep 10
+        }
+    }
+}

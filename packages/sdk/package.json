@@ -1,0 +1,12 @@
+{
+  "name": "@mars-ari/sdk",
+  "version": "0.1.0",
+  "description": "Mars-ari LMS integration SDK — embed course access and events in external platforms",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "keywords": ["lms", "mars-ari", "sdk", "e-learning"],
+  "license": "MIT"
+}
