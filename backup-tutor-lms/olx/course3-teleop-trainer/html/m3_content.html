@@ -1,0 +1,39 @@
+<h2>Module 3 — Telemetry Data</h2>
+  <p>Telemetry is the stream of sensor data coming from the robot in real-time. Understanding it helps you monitor data quality, detect problems, and understand what the AI will learn from.</p>
+
+  <h3>What Is Telemetry?</h3>
+  <p>Every sensor on the robot produces a continuous stream of measurements. The platform collects and stores all of this during your sessions:</p>
+  <ul>
+    <li><strong>Joint positions</strong> — Angle of each joint in radians, updated at 50 Hz</li>
+    <li><strong>Joint velocities</strong> — Speed of each joint</li>
+    <li><strong>End-effector pose</strong> — Position and orientation of the gripper in 3D space</li>
+    <li><strong>Battery level</strong> — Remaining power percentage</li>
+    <li><strong>Speed</strong> — Linear and angular velocity (for mobile robots)</li>
+    <li><strong>Signal strength</strong> — Connection quality</li>
+    <li><strong>GPS/position</strong> — Location (for outdoor robots)</li>
+  </ul>
+
+  <h3>Reading the Analytics Charts</h3>
+  <p>The Analytics panel (right side of dashboard) shows live charts of this data. As a trainer, you should monitor these during collection:</p>
+  <ul>
+    <li><strong>Speed chart</strong> — Should be smooth curves, not spikes. Spikes = jerky movement = bad data.</li>
+    <li><strong>Joint angle chart</strong> — Should show smooth transitions. Flat lines = robot not moving (idle).</li>
+    <li><strong>Battery chart</strong> — Should decrease gradually. Sudden drops = hardware issue.</li>
+  </ul>
+
+  <h3>Anomaly Detection</h3>
+  <p>Watch for these warning signs in telemetry:</p>
+  <ul>
+    <li>❌ <strong>Flat joint angles for &gt;1 second</strong> — Robot is idle. Stop and restart the episode.</li>
+    <li>❌ <strong>Speed spikes &gt;3x normal</strong> — Jerky movement. Discard this episode.</li>
+    <li>❌ <strong>Battery drop &gt;5% in 10 seconds</strong> — Hardware issue. Stop session.</li>
+    <li>❌ <strong>Signal strength below 2 bars</strong> — Connection unstable. Pause collection.</li>
+  </ul>
+
+  <h3>TimescaleDB — How Data Is Stored</h3>
+  <p>The platform stores all telemetry in a time-series database (TimescaleDB). This means you can query historical data, compare sessions, and analyze trends over time. The data is organized by robot ID and timestamp, making it easy to retrieve any episode for review or training.</p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/blog/robotdata/gigo" target="_blank">HuggingFace: Robot Data Quality — Garbage In, Garbage Out</a></li>
+  </ul>

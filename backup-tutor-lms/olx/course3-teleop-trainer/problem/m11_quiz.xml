@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem display_name="TeleOp Trainer — Final Certification Quiz" max_attempts="3" weight="100">
+
+  <multiplechoiceresponse>
+    <label>You have 500 episodes but 40% have idle trajectories. What should you do?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Train on all 500 — more data is always better</choice>
+      <choice correct="true">Curate first — remove idle episodes, train on the clean 300. Quality beats quantity.</choice>
+      <choice correct="false">Add more data to dilute the bad episodes</choice>
+      <choice correct="false">Increase the learning rate to compensate</choice>
+    </choicegroup>
+    <solution><p>Bad data actively hurts training. 300 clean episodes will produce a better policy than 500 noisy ones. Always curate before training.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Your policy achieves 95% success rate in simulation but only 30% on real hardware. What is the most likely cause?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">The model is too small</choice>
+      <choice correct="false">You need more training steps</choice>
+      <choice correct="true">Sim-to-real gap — the simulation doesn't match real-world physics, lighting, or sensor noise</choice>
+      <choice correct="false">The learning rate is too high</choice>
+    </choicegroup>
+    <solution><p>A large gap between sim and real performance is the classic sim-to-real problem. Fix: add domain randomization to sim, collect some real data, add sensor noise to sim observations.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What is the correct order of the Physical AI iteration loop?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Train → Collect → Deploy → Evaluate</choice>
+      <choice correct="true">Design → Collect → Curate → Train → Evaluate → Identify failures → Collect targeted data → Retrain</choice>
+      <choice correct="false">Deploy → Collect → Train → Evaluate</choice>
+      <choice correct="false">Evaluate → Train → Collect → Deploy</choice>
+    </choicegroup>
+    <solution><p>The loop always starts with design and collection, then training, then evaluation. Failures drive the next collection round. This iterative process is how Physical AI systems improve.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>A controller submits 100 episodes but they all start from the exact same object position. What problem does this create?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">The dataset is too small</choice>
+      <choice correct="true">Distribution shift — the policy will fail when the object is in any other position</choice>
+      <choice correct="false">The episodes are too short</choice>
+      <choice correct="false">No problem — consistency is good</choice>
+    </choicegroup>
+    <solution><p>Coverage is essential. A policy trained on one object position can't generalize to other positions. You need variation in your dataset to cover the range of conditions the robot will encounter.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Which model would you choose for a simple pick-and-place task with 80 clean episodes?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="true">ACT (Action Chunking Transformer) — designed for dexterous manipulation with small datasets</choice>
+      <choice correct="false">OpenVLA — needs 200+ episodes and is overkill for a simple task</choice>
+      <choice correct="false">Diffusion Policy — needs 100-500 episodes, more complex to train</choice>
+      <choice correct="false">SmolVLA — needs 500+ episodes for meaningful performance</choice>
+    </choicegroup>
+    <solution><p>ACT is specifically designed for dexterous manipulation tasks and works well with 50-200 episodes. It's the right choice for a simple pick-and-place with a small dataset.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What should a good job description for data collection include?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Just the task name — controllers should figure out the details</choice>
+      <choice correct="false">The model architecture you plan to use</choice>
+      <choice correct="true">Task description, reset procedure, episode requirements, quality criteria, and what to avoid</choice>
+      <choice correct="false">The training hyperparameters</choice>
+    </choicegroup>
+    <solution><p>A clear job description is the most important thing a trainer can provide. Controllers need to know exactly what to do, how to reset, how many episodes, and what quality looks like.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Your policy consistently fails during the "grasp" phase. What is the best next step?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Train for more steps</choice>
+      <choice correct="false">Switch to a larger model</choice>
+      <choice correct="true">Collect 50 episodes specifically focused on the grasp phase — approach, close gripper, verify grasp</choice>
+      <choice correct="false">Reduce the learning rate</choice>
+    </choicegroup>
+    <solution><p>When a policy fails at a specific phase, the fix is targeted data collection for that phase. More training steps or a larger model won't help if the training data doesn't cover the failure mode.</p></solution>
+  </multiplechoiceresponse>
+
+</problem>

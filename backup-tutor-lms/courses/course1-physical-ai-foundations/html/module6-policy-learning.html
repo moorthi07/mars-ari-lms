@@ -1,0 +1,101 @@
+<div class="module-content">
+  <h2>Module 6 — Policy Learning</h2>
+  <p class="module-intro">A policy is a function that maps observations to actions. Training a policy means teaching a neural network to reproduce the behavior in your dataset. This module covers the progression from a simple MLP baseline to vision-based policies.</p>
+
+  <hr/>
+  <h3>What Is a Policy?</h3>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace;">
+    π(a | s) — given state s, output action a
+  </div>
+  <p>In Physical AI, the policy is a neural network. It takes the robot's current observation (image + joint states) and outputs the next action (joint delta + gripper command).</p>
+
+  <hr/>
+  <h3>Behavior Cloning — The Baseline</h3>
+  <p>
+    Behavior cloning (BC) is the simplest form of imitation learning. It treats the problem
+    as supervised learning: given an observation, predict the action the human took.
+  </p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace; font-size:13px;">
+    <pre>
+# Training loop (simplified)
+for obs, action in dataset:
+    predicted_action = policy(obs)
+    loss = MSE(predicted_action, action)
+    loss.backward()
+    optimizer.step()
+    </pre>
+  </div>
+  <p>That's it. Behavior cloning is just supervised regression on (observation, action) pairs.</p>
+
+  <hr/>
+  <h3>The Policy Learning Ladder</h3>
+  <p>Start simple. Add complexity only when the simpler version fails.</p>
+
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Level</th><th>Model</th><th>Input</th><th>When to Use</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>MLP (Multi-Layer Perceptron)</td><td>Joint states only</td><td>First baseline, no vision needed</td></tr>
+      <tr><td>2</td><td>CNN + MLP</td><td>Image + joint states</td><td>When task requires visual feedback</td></tr>
+      <tr><td>3</td><td>Transformer (ACT, Diffusion Policy)</td><td>Image sequence + states</td><td>Complex multi-step tasks</td></tr>
+      <tr><td>4</td><td>VLA (OpenVLA, π0)</td><td>Image + language + states</td><td>Language-conditioned, multi-task</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+  <h3>Training Loop</h3>
+  <ol>
+    <li><strong>Load dataset</strong> — Split into train (80%) and validation (20%)</li>
+    <li><strong>Normalize</strong> — Scale observations and actions to [-1, 1]</li>
+    <li><strong>Forward pass</strong> — Run observation through policy network</li>
+    <li><strong>Compute loss</strong> — MSE between predicted and actual action</li>
+    <li><strong>Backward pass</strong> — Compute gradients</li>
+    <li><strong>Update weights</strong> — Adam optimizer, lr=1e-4</li>
+    <li><strong>Validate</strong> — Check loss on held-out episodes every N steps</li>
+    <li><strong>Evaluate in sim</strong> — Run rollouts, measure task success rate</li>
+  </ol>
+
+  <hr/>
+  <h3>Evaluation — The Only Metric That Matters</h3>
+  <p>
+    Validation loss tells you if the model is overfitting. It does NOT tell you if the
+    robot can complete the task. The only real metric is <strong>task success rate</strong>:
+    run 20 rollouts in simulation, count how many succeed.
+  </p>
+  <p>A policy with low validation loss but 0% success rate is useless. A policy with higher loss but 80% success rate is what you want.</p>
+
+  <hr/>
+  <h3>Common Failure Modes</h3>
+  <ul>
+    <li><strong>Drift</strong> — Small errors compound over time. Policy reaches a state never seen in training. Fix: add more diverse demonstrations, use DAgger.</li>
+    <li><strong>Oscillation</strong> — Policy can't commit to an action, oscillates between two options. Fix: smooth the action output, increase dataset size.</li>
+    <li><strong>Mode collapse</strong> — Policy always does the same thing regardless of input. Fix: check dataset diversity, increase model capacity.</li>
+    <li><strong>Overfitting</strong> — Perfect on training data, fails on new positions. Fix: more data, data augmentation, regularization.</li>
+  </ul>
+
+  <hr/>
+  <h3>DAgger — Dataset Aggregation</h3>
+  <p>
+    DAgger (Dataset Aggregation) fixes the drift problem. After training an initial policy:
+  </p>
+  <ol>
+    <li>Run the policy in simulation</li>
+    <li>When it drifts into a new state, record what a human would do from that state</li>
+    <li>Add those new (state, action) pairs to the dataset</li>
+    <li>Retrain</li>
+    <li>Repeat</li>
+  </ol>
+  <p>This is the same idea as Human-in-the-Loop (HIL) data collection from Module 4.</p>
+
+  <hr/>
+  <h3>Video: Behavior Cloning with LeRobot</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/1nR7GCE1oFU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: HuggingFace LeRobot — imitation learning tutorial (public)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/main/il_robots" target="_blank">HuggingFace: Imitation Learning on Real Robots</a></li>
+    <li><a href="https://abenstirling.com/lerobot/" target="_blank">LeRobot ACT Policy Explained</a></li>
+  </ul>
+</div>

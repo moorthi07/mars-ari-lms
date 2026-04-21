@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem display_name="TeleOp Controller — Final Certification Quiz" max_attempts="3" weight="100">
+
+  <multiplechoiceresponse>
+    <label>You connect to a robot and the signal meter shows 1 bar. What should you do?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Start the session immediately — 1 bar is enough</choice>
+      <choice correct="false">Reduce your movement speed and proceed</choice>
+      <choice correct="true">Wait for signal to improve before starting — poor signal means laggy controls and bad data</choice>
+      <choice correct="false">Restart the robot to improve signal</choice>
+    </choicegroup>
+    <solution><p>Poor signal causes control lag, which creates inconsistent data. Always wait for at least 3 bars before starting a session.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What does the red STOP button do?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Ends the recording session</choice>
+      <choice correct="false">Disconnects from the robot</choice>
+      <choice correct="true">Sends an immediate stop command — the robot stops all movement</choice>
+      <choice correct="false">Resets the robot to home position</choice>
+    </choicegroup>
+    <solution><p>The STOP button sends an emergency stop command. The robot stops moving immediately. Use it whenever you're unsure — it's always safe to stop.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Why does smooth movement matter for a TeleOp Controller?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">It makes the robot look better on camera</choice>
+      <choice correct="true">Smooth movements create clean training data — the AI learns smooth, consistent behavior from your demonstrations</choice>
+      <choice correct="false">Smooth movement is faster than jerky movement</choice>
+      <choice correct="false">It reduces battery consumption</choice>
+    </choicegroup>
+    <solution><p>Your movements are the training data. Jerky, inconsistent movements teach the AI jerky, inconsistent behavior. Smooth, deliberate movements teach the AI smooth, reliable behavior.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>You're mid-session and the battery drops to 12%. What should you do?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Continue — 12% is enough to finish</choice>
+      <choice correct="true">End the session now — stop before the battery hits 10% to avoid an incomplete episode</choice>
+      <choice correct="false">Speed up to finish the task faster</choice>
+      <choice correct="false">Ignore it — the platform will stop automatically</choice>
+    </choicegroup>
+    <solution><p>Always end sessions before 10% battery. A robot that dies mid-task creates an incomplete episode — wasted data that can't be used for training.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Which session name follows good naming conventions?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">session1</choice>
+      <choice correct="false">test april 17</choice>
+      <choice correct="true">arm-pick-red-cube-table-001</choice>
+      <choice correct="false">my session</choice>
+    </choicegroup>
+    <solution><p>Good session names describe the robot type, task, environment, and sequence number. This makes sessions findable and usable by trainers reviewing the data.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What is the purpose of speaking task descriptions during a session?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">It helps you remember what you're doing</choice>
+      <choice correct="false">It's required by the platform</choice>
+      <choice correct="true">Voice annotations create language-paired data that enables training language-conditioned AI policies</choice>
+      <choice correct="false">It improves the video quality</choice>
+    </choicegroup>
+    <solution><p>VLA models need (image, language, action) triples. Speaking task descriptions while operating creates the language component of this training data.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>You review a session and notice the robot stood still for 3 seconds in the middle. What should you do?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Keep it — 3 seconds is not a big deal</choice>
+      <choice correct="true">Mark it for discard — idle time teaches the AI to do nothing</choice>
+      <choice correct="false">Edit out the idle section</choice>
+      <choice correct="false">Submit it anyway and let the trainer decide</choice>
+    </choicegroup>
+    <solution><p>Idle trajectories are one of the most common data quality problems. The AI learns from your movements — if you stood still, it learns to stand still. Discard episodes with significant idle time.</p></solution>
+  </multiplechoiceresponse>
+
+</problem>

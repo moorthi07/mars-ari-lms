@@ -1,0 +1,61 @@
+<h2>Module 11 — The Iteration Loop</h2>
+  <p>Physical AI is not a one-shot process. It's an iterative loop of collect, train, evaluate, and improve. This final module teaches you how to run that loop effectively.</p>
+
+  <h3>The Full Loop</h3>
+  <div style="background:#1e1e1e; color:#fff; padding:20px; border-radius:8px; font-family:monospace; font-size:13px; line-height:2.2;">
+    1. Design session (Module 2)<br/>
+    2. Collect data (Modules 3-5)<br/>
+    3. Curate data (Module 6)<br/>
+    4. Label data (Module 7)<br/>
+    5. Train policy (Module 9)<br/>
+    6. Evaluate in simulation<br/>
+    7. Identify failure modes<br/>
+    8. Design targeted collection to fix failures<br/>
+    9. Collect more data (targeting failures)<br/>
+    10. Retrain with augmented dataset<br/>
+    11. Deploy to real hardware (with safety layer)<br/>
+    12. Collect HIL data (human corrects real failures)<br/>
+    13. Fine-tune on HIL data<br/>
+    14. Go to step 6<br/>
+  </div>
+
+  <h3>Reading Evaluation Results</h3>
+  <p>After training, run 20 evaluation rollouts in simulation. For each failure, ask:</p>
+  <ul>
+    <li><strong>Where did it fail?</strong> — Which phase of the task? (approach, grasp, place?)</li>
+    <li><strong>Why did it fail?</strong> — Wrong position? Wrong timing? Didn't see the object?</li>
+    <li><strong>What data would fix it?</strong> — More episodes from that starting position? More variation in object placement?</li>
+  </ul>
+
+  <h3>Common Failure Patterns and Fixes</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Failure Pattern</th><th>Root Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Fails from new starting positions</td><td>Not enough position coverage</td><td>Collect from 5+ different starting positions</td></tr>
+      <tr><td>Grasps but drops object</td><td>Inconsistent grasp in training data</td><td>Collect 50 episodes focused on grasp quality</td></tr>
+      <tr><td>Works in sim, fails on real hardware</td><td>Sim-to-real gap</td><td>Collect real data, add domain randomization to sim</td></tr>
+      <tr><td>Oscillates near target</td><td>Noisy training data near completion</td><td>Curate episodes more carefully, remove jitter</td></tr>
+      <tr><td>Ignores language instruction</td><td>Insufficient language diversity</td><td>Collect data with more varied task descriptions</td></tr>
+    </tbody>
+  </table>
+
+  <h3>When You're Done</h3>
+  <p>A policy is "done" when it meets your performance target consistently. Typical targets:</p>
+  <ul>
+    <li>Simple pick-and-place: 90%+ success rate in sim, 80%+ on real hardware</li>
+    <li>Multi-step manipulation: 80%+ in sim, 70%+ on real hardware</li>
+    <li>Language-conditioned: 70%+ on seen tasks, 50%+ on unseen tasks</li>
+  </ul>
+
+  <div style="background:#76B900; color:#000; padding:16px; border-radius:8px; margin:16px 0; font-weight:bold;">
+    🎓 Congratulations — you've completed the TeleOp Trainer Certification!<br/>
+    You now understand the complete Physical AI data pipeline.<br/>
+    Complete the final quiz to receive your certificate.
+  </div>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/hil_data_collection" target="_blank">HuggingFace: Human-in-the-Loop Data Collection</a></li>
+    <li><a href="https://huggingface.co/blog/lerobot-datasets-v3" target="_blank">HuggingFace: LeRobot Datasets v3</a></li>
+    <li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/08-operating-so101.html" target="_blank">NVIDIA: Complete Sim-to-Real Workflow</a></li>
+  </ul>

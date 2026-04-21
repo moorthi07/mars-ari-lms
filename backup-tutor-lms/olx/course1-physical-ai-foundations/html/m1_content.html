@@ -1,0 +1,138 @@
+<div class="module-content">
+
+  <h2>Module 1 — What Is Physical AI?</h2>
+  <p class="module-intro">
+    AI has left the browser. For decades, AI meant software — recommendation engines,
+    language models, image classifiers. Now it's moving into the physical world:
+    robots that pick, carry, assemble, and assist. This is Physical AI.
+  </p>
+
+  <hr/>
+
+  <h3>The Paradigm Shift</h3>
+  <p>
+    Classical robotics is <strong>programmed</strong>. An engineer writes explicit rules:
+    "if object is at position X, move arm to Y, close gripper." This works in controlled
+    factory environments where everything is predictable. It breaks the moment the world
+    changes — different lighting, a slightly misplaced object, a new task.
+  </p>
+  <p>
+    Physical AI is <strong>learned</strong>. Instead of programming behaviors, you collect
+    demonstrations of the behavior you want, and train a model to reproduce it. The robot
+    learns from data, not from hand-coded rules. This makes it far more adaptable.
+  </p>
+
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#1976D2; color:white;">
+        <th>Classical Robotics</th>
+        <th>Physical AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Hand-coded rules</td><td>Learned from data</td></tr>
+      <tr><td>Brittle to change</td><td>Generalizes to variation</td></tr>
+      <tr><td>Modular pipeline (perceive → plan → act)</td><td>End-to-end policy (observe → act)</td></tr>
+      <tr><td>Requires robotics expert</td><td>Requires data + ML expertise</td></tr>
+      <tr><td>Scales with engineering hours</td><td>Scales with data</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+
+  <h3>The Physical AI Loop</h3>
+  <p>Every Physical AI system follows the same fundamental loop:</p>
+
+  <div style="background:#1e1e1e; color:#fff; padding:20px; border-radius:8px; font-family:monospace; font-size:14px;">
+    <strong>Teleop</strong> → <strong>Dataset</strong> → <strong>Train Policy</strong> → <strong>Evaluate in Sim</strong> → <strong>Improve</strong> → <strong>Deploy</strong>
+    <br/><br/>
+    ↑_______________________________________________|
+    <br/>
+    (iterate until performance is acceptable)
+  </div>
+
+  <p>
+    This loop is the spine of everything you'll learn in this course. Every module
+    teaches one stage of this loop. By the end, you'll understand how each stage
+    connects to the others.
+  </p>
+
+  <hr/>
+
+  <h3>VLM vs VLA — What's the Difference?</h3>
+
+  <p><strong>VLM (Vision-Language Model)</strong></p>
+  <p>
+    A model that understands images and text together. It can answer questions about
+    what it sees, describe scenes, identify objects. Examples: GPT-4V, Gemini Vision,
+    LLaVA. VLMs are used in robotics for <em>perception and reasoning</em> — understanding
+    the scene, interpreting instructions, identifying what to pick up.
+  </p>
+
+  <p><strong>VLA (Vision-Language-Action Model)</strong></p>
+  <p>
+    A VLM that also outputs <em>actions</em>. Instead of just describing what it sees,
+    it decides what the robot should do. Input: camera image + language instruction.
+    Output: joint commands or end-effector movements. Examples: OpenVLA, Gemini Robotics,
+    π0 (Pi Zero). VLAs are the end-to-end brain of a Physical AI robot.
+  </p>
+
+  <div style="background:#0D47A1; color:#fff; padding:16px; border-radius:8px; margin:16px 0;">
+    <strong>Key insight:</strong> VLMs understand the world. VLAs act in it.
+    A VLA is essentially a VLM with an action head added.
+  </div>
+
+  <hr/>
+
+  <h3>Why Data Is the Real Bottleneck</h3>
+  <p>
+    The models exist. The simulators exist. The hardware exists. What's scarce is
+    <strong>high-quality robot training data</strong>. Unlike internet text or images,
+    robot data must be:
+  </p>
+  <ul>
+    <li>Physically embodied (tied to a specific robot's sensors and actuators)</li>
+    <li>Temporally synchronized (camera frames aligned with joint states)</li>
+    <li>Task-specific (demonstrations of the exact behavior you want)</li>
+    <li>Consistent (same task performed the same way, repeatedly)</li>
+  </ul>
+  <p>
+    This is why teleoperation — humans controlling robots to generate demonstrations —
+    is currently the primary method for collecting Physical AI training data.
+    Companies like Physical Intelligence, Figure AI, and 1X employ teams of
+    "robot trainers" whose job is exactly this.
+  </p>
+
+  <hr/>
+
+  <h3>Real-World Examples</h3>
+  <ul>
+    <li><strong>Tesla Optimus</strong> — humanoid trained on human video + teleoperation data</li>
+    <li><strong>Figure AI</strong> — manipulation tasks learned from human demonstrations</li>
+    <li><strong>Physical Intelligence (π0)</strong> — generalist robot policy trained on diverse teleop data</li>
+    <li><strong>Hugging Face LeRobot</strong> — open-source framework for robot learning from teleop</li>
+    <li><strong>Open X-Embodiment</strong> — Google's cross-robot dataset with 1M+ demonstrations</li>
+  </ul>
+
+  <hr/>
+
+  <h3>Video: Introduction to Physical AI</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X"
+      style="position:absolute; top:0; left:0; width:100%; height:100%;"
+      frameborder="0" allowfullscreen>
+    </iframe>
+  </div>
+  <p><em>Source: NVIDIA Isaac Lab — Physical AI overview playlist (public, free)</em></p>
+
+  <hr/>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/learn/robotics-course/unit0/2" target="_blank">Hugging Face Robotics Course — Unit 0: Getting Started with LeRobot</a></li>
+    <li><a href="https://github.com/openvla/openvla" target="_blank">OpenVLA — Open-source Vision-Language-Action model</a></li>
+    <li><a href="https://arxiv.org/abs/2405.12213" target="_blank">Open X-Embodiment: Robotic Learning Datasets and RT-X Models</a></li>
+  </ul>
+
+</div>

@@ -1,0 +1,232 @@
+/* ═══════════════════════════════════════════════════════
+   Mars Ed — Dark EdTech Theme Overrides
+   Deep space dark + electric cyan accent
+   ═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Base ─────────────────────────────────────────────── */
+html, body {
+  background-color: #060D1A !important;
+  color: #E8F4FF !important;
+  font-family: 'Space Grotesk', 'Inter', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #E8F4FF !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+a { color: #00C2FF !important; }
+a:hover { color: #66D9FF !important; }
+
+/* ── Header ───────────────────────────────────────────── */
+.wrapper-header, header.global-header, .global-header {
+  background: #060D1A !important;
+  border-bottom: 1px solid #1E3A5F !important;
+  box-shadow: 0 2px 20px rgba(0,194,255,0.06) !important;
+}
+.global-header .nav-item a,
+.global-header .nav-link {
+  color: #8BB8D4 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 500 !important;
+}
+.global-header .nav-item a:hover { color: #00C2FF !important; }
+
+/* ── Login / Register boxes ───────────────────────────── */
+body.view-login, body.view-register,
+.login-register-content, .wrapper-login, .wrapper-register-form {
+  background: #060D1A !important;
+}
+
+#login-form, #register-form,
+.login-form, .register-form,
+.form-wrapper {
+  background: #0A1628 !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 40px rgba(0,194,255,0.08) !important;
+}
+
+#login-form label, #register-form label,
+.login-form label, .register-form label {
+  color: #8BB8D4 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+#login-form input[type="text"],
+#login-form input[type="email"],
+#login-form input[type="password"],
+#register-form input[type="text"],
+#register-form input[type="email"],
+#register-form input[type="password"],
+.login-form input, .register-form input {
+  background: #060D1A !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 8px !important;
+  color: #E8F4FF !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  padding: 12px 16px !important;
+}
+
+#login-form input:focus,
+#register-form input:focus {
+  border-color: #00C2FF !important;
+  box-shadow: 0 0 0 3px rgba(0,194,255,0.15) !important;
+  outline: none !important;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+.btn-primary, .action-primary, .btn-brand,
+button[type="submit"], input[type="submit"] {
+  background: linear-gradient(135deg, #00C2FF 0%, #0066CC 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: #060D1A !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 15px rgba(0,194,255,0.3) !important;
+}
+
+.btn-default, .btn-secondary {
+  background: transparent !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 8px !important;
+  color: #8BB8D4 !important;
+}
+.btn-default:hover, .btn-secondary:hover {
+  border-color: #00C2FF !important;
+  color: #00C2FF !important;
+}
+
+/* ── Course cards ─────────────────────────────────────── */
+.course-card, .course-item, .discovery-card,
+.courses-listing .course-item {
+  background: #0A1628 !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+.course-card:hover, .course-item:hover {
+  border-color: #00C2FF !important;
+  box-shadow: 0 4px 30px rgba(0,194,255,0.12) !important;
+}
+.course-card .course-title,
+.course-item h3, .course-item h4 {
+  color: #E8F4FF !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 600 !important;
+}
+
+/* ── Dashboard ────────────────────────────────────────── */
+.dashboard, .wrapper-dashboard, .student-dashboard,
+.window-wrap, .content-wrapper {
+  background: #060D1A !important;
+}
+
+/* ── Sidebar / nav ────────────────────────────────────── */
+.course-sidebar, .sidebar, .block-tree,
+.course-navigation, .accordion-item {
+  background: #0A1628 !important;
+  border-right: 1px solid #1E3A5F !important;
+}
+
+/* ── Progress bar ─────────────────────────────────────── */
+.progress-bar, .progress .bar {
+  background: linear-gradient(90deg, #00C2FF, #0066CC) !important;
+}
+
+/* ── Alerts ───────────────────────────────────────────── */
+.alert-info, .message-info {
+  background: #0A1628 !important;
+  border-color: #00C2FF !important;
+  color: #E8F4FF !important;
+  border-radius: 8px !important;
+}
+.alert-error, .message-error, .alert-danger {
+  background: #1A0808 !important;
+  border-color: #FF6B6B !important;
+  color: #FF6B6B !important;
+  border-radius: 8px !important;
+}
+.alert-success {
+  background: #081A10 !important;
+  border-color: #00E5A0 !important;
+  color: #00E5A0 !important;
+  border-radius: 8px !important;
+}
+
+/* ── Course content ───────────────────────────────────── */
+.course-content, .wrapper-course-material,
+.courseware-results, .xblock-student-view {
+  background: #060D1A !important;
+  color: #E8F4FF !important;
+}
+
+/* ── Footer — hide OpenedX/Tutor logos ────────────────── */
+.powered-area, .logo-list,
+.footer-logo, img[alt*="OpenedX"],
+img[alt*="Tutor"], img[alt*="edX"],
+a[href*="openedx"], a[href*="tutor.edly"] {
+  display: none !important;
+}
+
+.wrapper-footer, footer {
+  background: #060D1A !important;
+  border-top: 1px solid #1E3A5F !important;
+}
+.wrapper-footer a, footer a { color: #8BB8D4 !important; }
+.wrapper-footer p, footer p,
+.wrapper-footer li, footer li,
+.wrapper-footer span, footer span { color: #8BB8D4 !important; }
+
+/* ── Inputs global ────────────────────────────────────── */
+input[type="text"], input[type="email"],
+input[type="password"], input[type="search"],
+textarea, select {
+  background: #060D1A !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 8px !important;
+  color: #E8F4FF !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+input::placeholder, textarea::placeholder { color: #4A6A8A !important; }
+
+/* ── Tables ───────────────────────────────────────────── */
+table { background: #0A1628 !important; color: #E8F4FF !important; }
+th { background: #0F1E35 !important; color: #00C2FF !important; border-color: #1E3A5F !important; }
+td { border-color: #1E3A5F !important; color: #E8F4FF !important; }
+tr:nth-child(even) { background: #0A1628 !important; }
+tr:nth-child(odd) { background: #060D1A !important; }
+
+/* ── Modals ───────────────────────────────────────────── */
+.modal, .modal-content, .modal-dialog {
+  background: #0A1628 !important;
+  border: 1px solid #1E3A5F !important;
+  border-radius: 12px !important;
+  color: #E8F4FF !important;
+}
+.modal-header { border-bottom: 1px solid #1E3A5F !important; }
+.modal-footer { border-top: 1px solid #1E3A5F !important; }
+
+/* ── Tabs ─────────────────────────────────────────────── */
+.nav-tabs { border-bottom: 1px solid #1E3A5F !important; }
+.nav-tabs li a { color: #8BB8D4 !important; }
+.nav-tabs li.active a,
+.nav-tabs li a:hover {
+  color: #00C2FF !important;
+  border-color: #00C2FF transparent transparent !important;
+  background: transparent !important;
+}
+
+/* ── Breadcrumbs ──────────────────────────────────────── */
+.breadcrumb { background: transparent !important; }
+.breadcrumb li a { color: #8BB8D4 !important; }
+.breadcrumb li.active { color: #E8F4FF !important; }

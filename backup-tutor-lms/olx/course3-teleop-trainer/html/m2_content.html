@@ -1,0 +1,44 @@
+<h2>Module 2 — Designing a Data Collection Session</h2>
+  <p>A well-designed session produces usable data. A poorly designed session wastes everyone's time. This module teaches you how to plan before you collect.</p>
+
+  <h3>Task Decomposition</h3>
+  <p>Before collecting data, break your task into clear, atomic steps. Example for "pick and place red cube":</p>
+  <ol>
+    <li>Start position: arm at home, gripper open</li>
+    <li>Approach: move arm above the cube</li>
+    <li>Descend: lower arm to grasp height</li>
+    <li>Grasp: close gripper</li>
+    <li>Lift: raise arm with cube</li>
+    <li>Transport: move arm to target location</li>
+    <li>Place: lower arm to placement height</li>
+    <li>Release: open gripper</li>
+    <li>Retract: return arm to home position</li>
+  </ol>
+  <p>Each step should be consistent across all episodes. If step 3 looks different in every episode, the AI can't learn it.</p>
+
+  <h3>Episode Length</h3>
+  <p>Keep episodes short and focused. A 5-second pick-and-place is better than a 30-second wandering session. Shorter episodes = cleaner data = faster training.</p>
+  <ul>
+    <li>Simple manipulation: 3-10 seconds per episode</li>
+    <li>Multi-step tasks: 10-30 seconds per episode</li>
+    <li>Navigation tasks: 30-120 seconds per episode</li>
+  </ul>
+
+  <h3>Reset Procedures</h3>
+  <p>Every episode must start from the same (or similar) starting state. Define your reset procedure before collecting:</p>
+  <ul>
+    <li>Where does the robot arm start? (home position)</li>
+    <li>Where is the object placed? (fixed position, or randomized within a range?)</li>
+    <li>What is the camera angle?</li>
+    <li>What is the lighting?</li>
+  </ul>
+  <p>Write this down. Follow it every time. Consistency in resets = consistency in data.</p>
+
+  <h3>Coverage Planning</h3>
+  <p>Coverage means collecting data across the full range of conditions the AI will encounter. Plan for variation:</p>
+  <ul>
+    <li>Object position: collect from 5 different positions</li>
+    <li>Object orientation: collect from 3 different rotations</li>
+    <li>Approach angle: collect from 2 different approach directions</li>
+  </ul>
+  <p>A dataset with 100 episodes from one position is less useful than 50 episodes spread across 5 positions.</p>

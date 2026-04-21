@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problem display_name="Module 1 Quiz — What Is Physical AI?" max_attempts="0" weight="10">
+
+  <multiplechoiceresponse>
+    <label>What is the fundamental difference between classical robotics and Physical AI?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Classical robotics uses more sensors than Physical AI</choice>
+      <choice correct="true">Classical robotics is programmed with explicit rules; Physical AI learns from data</choice>
+      <choice correct="false">Physical AI only works in simulation, not on real robots</choice>
+      <choice correct="false">Classical robotics is faster than Physical AI</choice>
+    </choicegroup>
+    <solution><p>Physical AI replaces hand-coded rules with learned policies trained on demonstration data. This makes it more adaptable but requires high-quality training data.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What does a VLA model output that a VLM does not?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Text descriptions of the scene</choice>
+      <choice correct="false">Object bounding boxes</choice>
+      <choice correct="true">Robot actions (joint commands or end-effector movements)</choice>
+      <choice correct="false">3D point clouds</choice>
+    </choicegroup>
+    <solution><p>VLA = Vision-Language-Action. The "Action" part is what distinguishes it from a VLM. A VLA takes image + language instruction and outputs robot actions directly.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Why is data considered the primary bottleneck in Physical AI?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Robot hardware is too expensive</choice>
+      <choice correct="false">There are no good simulation environments</choice>
+      <choice correct="true">Robot training data must be physically embodied, synchronized, task-specific, and consistent — making it hard to collect at scale</choice>
+      <choice correct="false">AI models for robotics don't exist yet</choice>
+    </choicegroup>
+    <solution><p>Unlike internet text or images, robot data requires physical embodiment, precise temporal synchronization, and task-specific demonstrations. This makes it expensive and slow to collect.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>What is the correct order of the Physical AI loop?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">Train → Collect → Deploy → Evaluate</choice>
+      <choice correct="true">Teleop → Dataset → Train Policy → Evaluate → Improve → Deploy</choice>
+      <choice correct="false">Deploy → Evaluate → Train → Collect</choice>
+      <choice correct="false">Dataset → Deploy → Teleop → Train</choice>
+    </choicegroup>
+    <solution><p>The Physical AI loop always starts with data collection (teleop), then training, then evaluation, then improvement. Deployment comes after the policy meets performance requirements.</p></solution>
+  </multiplechoiceresponse>
+
+  <multiplechoiceresponse>
+    <label>Which of these is an example of a VLA model?</label>
+    <choicegroup type="MultipleChoice">
+      <choice correct="false">GPT-4</choice>
+      <choice correct="false">Stable Diffusion</choice>
+      <choice correct="true">OpenVLA / π0 (Pi Zero)</choice>
+      <choice correct="false">YOLO object detector</choice>
+    </choicegroup>
+    <solution><p>OpenVLA and π0 are Vision-Language-Action models — they take visual input and language instructions and output robot actions. GPT-4 is a language model, Stable Diffusion generates images, YOLO detects objects.</p></solution>
+  </multiplechoiceresponse>
+
+</problem>

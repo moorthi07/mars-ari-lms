@@ -1,0 +1,43 @@
+<h2>Module 4 — Video Data Quality</h2>
+  <p>Vision is the primary input to VLA models. The quality of your video data directly determines whether the AI can see what it needs to see to learn the task.</p>
+
+  <h3>Why Vision Matters So Much</h3>
+  <p>VLA models take camera images as their primary input. If the image is blurry, dark, occluded, or inconsistent, the model can't learn from it. A dataset with perfect joint data but poor images is nearly useless for vision-based policies.</p>
+
+  <h3>Camera Placement</h3>
+  <p>Two camera views are standard for manipulation tasks:</p>
+  <ul>
+    <li><strong>Wrist camera</strong> — Mounted on the robot's wrist, near the gripper. Shows what the gripper is doing. Essential for grasping tasks.</li>
+    <li><strong>Overhead/fixed camera</strong> — Fixed position above the workspace. Shows the full scene. Essential for navigation and placement tasks.</li>
+  </ul>
+  <p>Collect both views when possible. Models trained on multi-view data generalize better.</p>
+
+  <h3>Lighting Requirements</h3>
+  <ul>
+    <li>✅ Even, diffuse lighting — no harsh shadows</li>
+    <li>✅ Consistent lighting across all episodes in a session</li>
+    <li>✅ Bright enough to see object colors clearly</li>
+    <li>❌ Direct sunlight causing glare</li>
+    <li>❌ Backlighting that silhouettes the robot</li>
+    <li>❌ Flickering lights (fluorescent)</li>
+  </ul>
+
+  <h3>Common Video Problems</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Blurry image</td><td>Camera moving too fast, focus issue</td><td>Slow down movements, check camera mount</td></tr>
+      <tr><td>Dark image</td><td>Poor lighting, lens dirty</td><td>Add lighting, clean lens</td></tr>
+      <tr><td>Occlusion</td><td>Robot arm blocking camera view</td><td>Reposition camera or change approach angle</td></tr>
+      <tr><td>Inconsistent framing</td><td>Camera moved between episodes</td><td>Fix camera mount, don't touch between episodes</td></tr>
+      <tr><td>Lag/stuttering</td><td>Poor connection, encoding issues</td><td>Check signal strength, reduce resolution</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Frame Rate</h3>
+  <p>Collect at 30 FPS minimum. 60 FPS is better for fast manipulation tasks. The frame rate must match what you'll use during inference — a policy trained on 30 FPS data will behave incorrectly if deployed at 10 FPS.</p>
+
+  <h3>Video: Camera Setup for Robot Learning</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>

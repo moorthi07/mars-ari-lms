@@ -3,10 +3,9 @@ version: '3.9'
 name: mars-ari-lms
 
 services:
-  # ── Infrastructure ──────────────────────────────────────────────────────────
 
   postgres:
-    image: postgres:16-alpine
+    image: openremote/postgresql:${POSTGRESQL_VERSION:-latest}
     container_name: mars-ari-postgres
     restart: unless-stopped
     environment:
@@ -17,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-5434}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-marsari}"]
       interval: 10s
@@ -32,7 +31,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "${REDIS_PORT:-6380}:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis_secret}", "ping"]
       interval: 10s
@@ -40,7 +39,7 @@ services:
       retries: 5
 
   opensearch:
-    image: opensearchproject/opensearch:2.12.0
+    image: opensearchproject/opensearch:2.11.1
     container_name: mars-ari-opensearch
     restart: unless-stopped
     environment:
@@ -50,18 +49,32 @@ services:
     volumes:
       - opensearch_data:/usr/share/opensearch/data
     ports:
-      - "${OPENSEARCH_PORT:-9200}:9200"
+      - "${OPENSEARCH_PORT:-9201}:9200"
     healthcheck:
-      test: ["CMD-SHELL", "curl -sk https://localhost:9200/_cluster/health -u admin:${OPENSEARCH_ADMIN_PASSWORD:-Admin_Secret_123} | grep -q '\"status\":\"green\\|yellow\"'"]
+      test: ["CMD-SHELL", "curl -sk https://localhost:9200/_cluster/health -u admin:${OPENSEARCH_ADMIN_PASSWORD:-Admin_Secret_123} | grep -q 'green\\|yellow'"]
       interval: 30s
       timeout: 10s
       retries: 5
 
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.11.1
+    container_name: mars-ari-opensearch-dashboards
+    restart: unless-stopped
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
+      OPENSEARCH_USERNAME: admin
+      OPENSEARCH_PASSWORD: ${OPENSEARCH_ADMIN_PASSWORD:-Admin_Secret_123}
+      OPENSEARCH_SSL_VERIFICATIONMODE: none
+    ports:
+      - "5602:5601"
+    depends_on:
+      opensearch:
+        condition: service_healthy
+
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0
+    image: openremote/keycloak:${KEYCLOAK_VERSION:-latest}
     container_name: mars-ari-keycloak
     restart: unless-stopped
-    command: start-dev --import-realm
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-mars_ari_lms}
@@ -71,13 +84,13 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin_secret}
       KC_HOSTNAME: ${KC_HOSTNAME:-localhost}
-      KC_HOSTNAME_PORT: ${KEYCLOAK_PORT:-8080}
+      KC_HOSTNAME_PORT: ${KEYCLOAK_PORT:-8082}
       KC_HTTP_ENABLED: "true"
       KC_FEATURES: token-exchange,admin-fine-grained-authz
     volumes:
       - ./infra/keycloak/realms:/opt/keycloak/data/import
     ports:
-      - "${KEYCLOAK_PORT:-8080}:8080"
+      - "${KEYCLOAK_PORT:-8082}:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -93,20 +106,18 @@ services:
     volumes:
       - minio_data:/data
     ports:
-      - "${MINIO_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "${MINIO_PORT:-9002}:9000"
+      - "${MINIO_CONSOLE_PORT:-9003}:9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  # ── Application ─────────────────────────────────────────────────────────────
-
   api:
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/api/Dockerfile
       target: ${NODE_ENV:-development}
     container_name: mars-ari-api
     restart: unless-stopped
@@ -127,13 +138,11 @@ services:
       MINIO_BUCKET: ${MINIO_BUCKET:-mars-ari-media}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
-      # AI Providers — BYOK
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       GROQ_API_KEY: ${GROQ_API_KEY:-}
-      # YouTube Data API for video search
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
       JWT_SECRET: ${JWT_SECRET:-changeme_in_production}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
@@ -151,8 +160,8 @@ services:
 
   worker:
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/api/Dockerfile
       target: ${NODE_ENV:-development}
     container_name: mars-ari-worker
     restart: unless-stopped
@@ -178,14 +187,14 @@ services:
 
   web:
     build:
-      context: ./apps/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/web/Dockerfile
       target: ${NODE_ENV:-development}
     container_name: mars-ari-web
     restart: unless-stopped
     environment:
       VITE_API_URL: ${VITE_API_URL:-http://localhost:3001}
-      VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:-http://localhost:8080}
+      VITE_KEYCLOAK_URL: ${VITE_KEYCLOAK_URL:-http://localhost:8082}
       VITE_KEYCLOAK_REALM: ${KEYCLOAK_REALM:-mars-ari}
       VITE_KEYCLOAK_CLIENT_ID: ${VITE_KEYCLOAK_CLIENT_ID:-mars-ari-web}
     ports:

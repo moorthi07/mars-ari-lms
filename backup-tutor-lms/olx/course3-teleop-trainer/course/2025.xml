@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<course
+  display_name="TeleOp Trainer Certification"
+  start="2025-01-01T00:00:00Z"
+  language="en"
+  cert_html_view_enabled="true"
+  certificates_display_behavior="end"
+  self_paced="true"
+>
+  <chapter url_name="m1"/>
+  <chapter url_name="m2"/>
+  <chapter url_name="m3"/>
+  <chapter url_name="m4"/>
+  <chapter url_name="m5"/>
+  <chapter url_name="m6"/>
+  <chapter url_name="m7"/>
+  <chapter url_name="m8"/>
+  <chapter url_name="m9"/>
+  <chapter url_name="m10"/>
+  <chapter url_name="m11"/>
+</course>

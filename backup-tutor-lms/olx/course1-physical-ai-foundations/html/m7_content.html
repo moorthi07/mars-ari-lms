@@ -1,0 +1,97 @@
+<div class="module-content">
+  <h2>Module 7 — VLM & VLA Models</h2>
+  <p class="module-intro">Vision-Language Models and Vision-Language-Action Models are the frontier of Physical AI. They enable robots to understand natural language instructions and act on them — without task-specific programming. This module explains how they work and how to use them.</p>
+
+  <hr/>
+  <h3>Why Language?</h3>
+  <p>
+    Humans give instructions in language: "pick up the red cup," "move to the left shelf,"
+    "hand me the screwdriver." A robot that can understand and act on language instructions
+    is far more useful than one that can only execute pre-programmed tasks.
+    Language also enables <strong>zero-shot generalization</strong> — the robot can attempt
+    tasks it was never explicitly trained on, by reasoning from language.
+  </p>
+
+  <hr/>
+  <h3>VLM — Vision-Language Model</h3>
+  <p>A VLM takes an image and text as input and produces text as output.</p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace;">
+    Input: [image of table with objects] + "What objects are on the table?"<br/>
+    Output: "A red cube, a blue cylinder, and a yellow sphere."
+  </div>
+  <p>In robotics, VLMs are used for:</p>
+  <ul>
+    <li><strong>Object detection</strong> — "Where is the red cube?"</li>
+    <li><strong>Scene understanding</strong> — "Is the gripper above the object?"</li>
+    <li><strong>Task grounding</strong> — "Which object should I pick up to complete this task?"</li>
+    <li><strong>Failure detection</strong> — "Did the grasp succeed?"</li>
+  </ul>
+  <p>Examples: GPT-4V, Gemini Vision, LLaVA, InternVL</p>
+
+  <hr/>
+  <h3>VLA — Vision-Language-Action Model</h3>
+  <p>A VLA extends a VLM by adding an <strong>action head</strong> — a component that outputs robot actions instead of text.</p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace;">
+    Input: [camera image] + "pick up the red cube"<br/>
+    Output: [joint_delta: 0.02, 0.01, -0.03, 0.0, 0.01, 0.0, gripper: 0.0]
+  </div>
+  <p>The VLA processes the image and language together, then outputs the next robot action. This is end-to-end: no separate perception, planning, or control modules.</p>
+
+  <hr/>
+  <h3>How VLAs Are Trained</h3>
+  <ol>
+    <li><strong>Start with a pretrained VLM</strong> — e.g., LLaVA, PaliGemma, Qwen-VL</li>
+    <li><strong>Add an action head</strong> — A small network that maps VLM embeddings to robot actions</li>
+    <li><strong>Fine-tune on robot data</strong> — Your teleoperation dataset with (image, language, action) triples</li>
+    <li><strong>Evaluate on held-out tasks</strong> — Test generalization to new instructions</li>
+  </ol>
+  <p>The VLM backbone provides visual and language understanding. The action head learns to translate that understanding into robot movements.</p>
+
+  <hr/>
+  <h3>Key VLA Models (2024-2025)</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Model</th><th>Organization</th><th>Open Source?</th><th>Key Feature</th></tr></thead>
+    <tbody>
+      <tr><td>OpenVLA</td><td>Stanford/Berkeley</td><td>✅ Yes</td><td>7B param, strong baseline</td></tr>
+      <tr><td>π0 (Pi Zero)</td><td>Physical Intelligence</td><td>❌ No</td><td>Generalist, multi-task</td></tr>
+      <tr><td>Gemini Robotics</td><td>Google DeepMind</td><td>❌ No</td><td>Gemini backbone, dexterous</td></tr>
+      <tr><td>SmolVLA</td><td>HuggingFace</td><td>✅ Yes</td><td>Small, fast, LeRobot compatible</td></tr>
+      <tr><td>RoboVLMs</td><td>Various</td><td>✅ Yes</td><td>Survey + benchmark</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+  <h3>Dataset Requirements for VLA Training</h3>
+  <p>VLAs need more than standard behavior cloning datasets:</p>
+  <ul>
+    <li><strong>Language annotations</strong> — Every episode needs a task description</li>
+    <li><strong>Task diversity</strong> — Multiple different tasks, not just one</li>
+    <li><strong>Object diversity</strong> — Different objects, colors, shapes</li>
+    <li><strong>Scale</strong> — Typically 2000+ episodes for meaningful generalization</li>
+    <li><strong>Multi-view cameras</strong> — Wrist + overhead cameras improve performance</li>
+  </ul>
+
+  <hr/>
+  <h3>Limitations of Current VLAs</h3>
+  <ul>
+    <li><strong>Data hungry</strong> — Need large, diverse datasets to generalize</li>
+    <li><strong>Slow inference</strong> — Large models can't run at 50 Hz without optimization</li>
+    <li><strong>Brittle to distribution shift</strong> — Still fail on unseen environments</li>
+    <li><strong>Hard to debug</strong> — End-to-end models are black boxes</li>
+  </ul>
+  <p>These are active research problems. The field is moving fast — expect significant improvements in 2025-2026.</p>
+
+  <hr/>
+  <h3>Video: VLA Models Explained</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: NVIDIA Physical AI series (public YouTube)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://github.com/openvla/openvla" target="_blank">OpenVLA — Open-source VLA model</a></li>
+    <li><a href="https://arxiv.org/abs/2406.09246" target="_blank">OpenVLA paper: An Open-Source Vision-Language-Action Model</a></li>
+    <li><a href="https://huggingface.co/docs/lerobot/hilserl" target="_blank">HuggingFace: HIL-SERL Real Robot Training</a></li>
+  </ul>
+</div>

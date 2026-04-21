@@ -1,0 +1,25 @@
+<h2>Module 5 — Arm & Manipulator Controls</h2>
+  <p>Arm controls let you move a robot's arm and gripper. This is harder than drive controls — but it's where the most valuable training data comes from.</p>
+
+  <h3>The Arm Joystick</h3>
+  <p>Controls the arm's end-effector (the gripper/hand) in 3D space. Think of it like moving your own hand — you're controlling where the gripper goes, not each individual joint.</p>
+
+  <h3>6-DOF Sliders</h3>
+  <p>Six sliders, one for each joint of the arm. Each slider moves one joint. This gives you precise control but requires more coordination. Good for fine adjustments.</p>
+
+  <h3>SVG Arm Control</h3>
+  <p>A visual representation of the arm. Click and drag joints directly on the diagram. Intuitive for beginners.</p>
+
+  <h3>The Gripper</h3>
+  <p>Open and close the gripper using the gripper control. Most tasks involve: approach → open gripper → move to object → close gripper → lift → move to target → open gripper → release.</p>
+
+  <h3>Joint Limits</h3>
+  <p>Each joint has a safe range of motion. The platform enforces these limits automatically — you can't move a joint past its safe range. If a slider stops moving, you've hit a limit. Don't force it.</p>
+
+  <h3>Tips for Good Arm Data</h3>
+  <ul>
+    <li>Move slowly and deliberately — no sudden jerks</li>
+    <li>Approach objects from a consistent direction every time</li>
+    <li>Close the gripper fully before lifting</li>
+    <li>Don't hover — commit to the movement</li>
+  </ul>

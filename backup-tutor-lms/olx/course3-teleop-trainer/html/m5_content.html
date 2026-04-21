@@ -1,0 +1,38 @@
+<h2>Module 5 — Audio & Language Pairing</h2>
+  <p>Language-conditioned policies need paired audio and action data. This module teaches you how to collect voice data that makes your dataset useful for VLA training.</p>
+
+  <h3>Why Language Pairing Matters</h3>
+  <p>A VLA model takes three inputs: image, language instruction, and robot state. If your dataset doesn't include language annotations, you can't train a language-conditioned policy. The language tells the model <em>what</em> the robot is supposed to be doing — without it, the model can only learn to repeat the same task, not generalize to new instructions.</p>
+
+  <h3>The Whisper Transcription Pipeline</h3>
+  <p>The platform uses OpenAI Whisper to automatically transcribe your voice commands during sessions. The transcription is stored alongside the video and joint data, creating a synchronized (image, language, action) dataset.</p>
+  <p>Workflow:</p>
+  <ol>
+    <li>Enable voice recording before starting your session</li>
+    <li>Speak your task description at the start of each episode: "Pick up the red cube and place it in the bin"</li>
+    <li>Speak action labels as you perform them: "approaching cube", "grasping", "lifting", "placing"</li>
+    <li>The platform transcribes and timestamps everything automatically</li>
+  </ol>
+
+  <h3>Good Language Annotation Habits</h3>
+  <ul>
+    <li>✅ Describe the task, not the controls: "pick up the cube" not "move arm left"</li>
+    <li>✅ Use consistent vocabulary across episodes: always "red cube", not sometimes "red block"</li>
+    <li>✅ Speak at the start of each episode, not mid-task</li>
+    <li>✅ Keep descriptions short and specific: 5-10 words</li>
+    <li>❌ Don't narrate every micro-movement</li>
+    <li>❌ Don't use ambiguous language: "that thing" instead of "red cube"</li>
+  </ul>
+
+  <h3>Audio Quality</h3>
+  <ul>
+    <li>Use a headset microphone if possible — reduces background noise</li>
+    <li>Speak at normal volume and pace</li>
+    <li>Minimize background noise (fans, music, conversations)</li>
+    <li>Check transcription accuracy in the session review — if Whisper is getting words wrong, speak more clearly</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/main/processors_robots_teleop" target="_blank">HuggingFace: Processors for Robots and Teleoperators</a></li>
+  </ul>

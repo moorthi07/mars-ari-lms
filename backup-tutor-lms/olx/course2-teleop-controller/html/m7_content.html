@@ -1,0 +1,29 @@
+<h2>Module 7 — Watching & Monitoring</h2>
+  <p>Good operators don't just control — they monitor. Knowing what your robot is experiencing helps you make better decisions and catch problems early.</p>
+
+  <h3>The Video Feed</h3>
+  <p>Your primary view of the robot's world. Things to watch for:</p>
+  <ul>
+    <li><strong>Image quality</strong> — Blurry or dark images mean bad training data. Stop and fix before continuing.</li>
+    <li><strong>Occlusion</strong> — Is the camera blocked? Reposition if needed.</li>
+    <li><strong>Lag</strong> — If the video is delayed, your controls will feel off. Check signal strength.</li>
+  </ul>
+
+  <h3>The Analytics Panel</h3>
+  <p>The right panel shows live charts of robot data:</p>
+  <ul>
+    <li><strong>Speed</strong> — How fast the robot is moving</li>
+    <li><strong>Battery</strong> — Remaining power (stop before it hits 10%)</li>
+    <li><strong>Signal strength</strong> — Connection quality</li>
+    <li><strong>Joint angles</strong> — Current position of each arm joint</li>
+  </ul>
+
+  <h3>Reading the Signal Meter</h3>
+  <ul>
+    <li>🟢 4-5 bars — Excellent. Full speed ahead.</li>
+    <li>🟡 2-3 bars — Acceptable. Reduce speed, be careful.</li>
+    <li>🔴 0-1 bars — Poor. Stop and wait for signal to improve.</li>
+  </ul>
+
+  <h3>Battery Management</h3>
+  <p>Always end your session before the battery hits 15%. A robot that dies mid-task creates an incomplete episode — wasted data. Watch the battery chart and plan your session length accordingly.</p>

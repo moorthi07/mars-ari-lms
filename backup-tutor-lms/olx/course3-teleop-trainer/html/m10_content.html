@@ -1,0 +1,43 @@
+<h2>Module 10 — Managing Data Collection Jobs</h2>
+  <p>As a trainer, you're often the client on TeleOp Hub — posting jobs for controllers to complete, reviewing their work, and managing the data pipeline.</p>
+
+  <h3>Writing a Good Job Description</h3>
+  <p>A clear job description produces better data. Include:</p>
+  <ul>
+    <li><strong>Task description</strong> — Exactly what the robot should do, step by step</li>
+    <li><strong>Robot type</strong> — Which robot, which controls to use</li>
+    <li><strong>Episode requirements</strong> — How many episodes, how long each should be</li>
+    <li><strong>Quality criteria</strong> — What makes a good episode (smooth movement, specific approach angle, etc.)</li>
+    <li><strong>Reset procedure</strong> — Exactly how to reset between episodes</li>
+    <li><strong>What to avoid</strong> — Common mistakes to prevent</li>
+  </ul>
+
+  <h3>Example Job Description</h3>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-size:13px;">
+    <strong>Task:</strong> Pick up the red cube from the table and place it in the blue bin.<br/><br/>
+    <strong>Robot:</strong> 6-DOF arm with wrist camera. Use arm joystick controls.<br/><br/>
+    <strong>Episodes needed:</strong> 100 successful episodes<br/><br/>
+    <strong>Episode length:</strong> 5-10 seconds<br/><br/>
+    <strong>Reset:</strong> Return arm to home position. Place red cube at marked position (center of table, 30cm from arm base).<br/><br/>
+    <strong>Quality criteria:</strong> Smooth approach from above. Gripper fully closed before lifting. No pauses &gt;0.5s.<br/><br/>
+    <strong>Avoid:</strong> Approaching from the side. Dropping the cube. Idle time.
+  </div>
+
+  <h3>Reviewing Submitted Work</h3>
+  <p>When controllers submit sessions, review them before accepting:</p>
+  <ol>
+    <li>Watch 10% of episodes in the media gallery</li>
+    <li>Check telemetry charts for idle time and jitter</li>
+    <li>Verify task completion rate (&gt;90% target)</li>
+    <li>Check episode length consistency</li>
+    <li>Accept or request revisions</li>
+  </ol>
+
+  <h3>Quality Gates</h3>
+  <p>Set minimum quality thresholds before accepting a batch:</p>
+  <ul>
+    <li>Task success rate: &gt;90%</li>
+    <li>Idle ratio: &lt;5% of frames</li>
+    <li>Episode length: within ±50% of target</li>
+    <li>Video quality: no blurry or dark episodes</li>
+  </ul>

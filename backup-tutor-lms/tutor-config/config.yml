@@ -1,0 +1,28 @@
+# Mars Ed — Tutor Open edX Configuration
+# Apply with: tutor config save --interactive
+# Or copy values manually into: $(tutor config printroot)/config.yml
+
+# Branding
+PLATFORM_NAME: "Mars Ed — MarsGeo Robotics University"
+LMS_HOST: "learn.marsgeo.io"
+CMS_HOST: "studio.marsgeo.io"
+CONTACT_EMAIL: "learn@marsgeo.io"
+
+# Theme
+THEME_NAME: "indigo"  # Best-looking built-in dark theme — we'll override with custom CSS
+
+# Features
+ENABLE_HTTPS: true
+ENABLE_REGISTRATION: true
+ENABLE_ACCOUNT_DELETION: true
+
+# Certificates
+CERTIFICATE_THEME_DIR: "lms/theme/certificates"
+
+# Social auth (optional — can wire to existing Keycloak later)
+ENABLE_OAUTH2_PROVIDER: false
+
+# Email
+EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+# Set these in .env:
+# EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD

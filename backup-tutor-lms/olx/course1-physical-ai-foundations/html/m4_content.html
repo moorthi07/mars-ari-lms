@@ -1,0 +1,103 @@
+<div class="module-content">
+  <h2>Module 4 — Teleoperation</h2>
+  <p class="module-intro">Teleoperation is how Physical AI gets its training data. A human operator controls the robot, performing the task correctly, while every observation and action is recorded. This is called <strong>imitation learning from demonstrations</strong> — and the quality of your teleop directly determines the quality of your policy.</p>
+
+  <hr/>
+  <h3>Why Teleoperation?</h3>
+  <p>Robots can't learn from scratch in the real world — it's too slow and too dangerous. But they can learn from watching humans. Teleoperation lets you:</p>
+  <ul>
+    <li>Generate expert demonstrations efficiently</li>
+    <li>Cover diverse task variations (different object positions, lighting, speeds)</li>
+    <li>Provide recovery demonstrations (what to do when things go wrong)</li>
+    <li>Scale data collection by hiring multiple operators</li>
+  </ul>
+
+  <hr/>
+  <h3>Teleoperation Interfaces</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Interface</th><th>Best For</th><th>Latency</th></tr></thead>
+    <tbody>
+      <tr><td>Keyboard</td><td>Simple tasks, development</td><td>Low</td></tr>
+      <tr><td>Gamepad/Joystick</td><td>Drive robots, coarse manipulation</td><td>Low</td></tr>
+      <tr><td>Web UI (like MarsGeo)</td><td>Remote operation, scalable hiring</td><td>Medium</td></tr>
+      <tr><td>Leader-follower arm</td><td>Dexterous manipulation (LeRobot SO-101)</td><td>Very low</td></tr>
+      <tr><td>VR controllers</td><td>Bimanual tasks, humanoids</td><td>Low</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+  <h3>The Episode Structure</h3>
+  <p>Every teleoperation session is organized into <strong>episodes</strong>. An episode is one complete attempt at a task — from reset to completion (or failure).</p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace; font-size:13px;">
+    <pre>
+Episode {
+  id: "ep_0042"
+  task: "pick up red cube and place in bin"
+  frames: [
+    { t: 0.00, obs: {image: ..., joints: [...]}, action: [0.01, 0.0, ...] },
+    { t: 0.02, obs: {image: ..., joints: [...]}, action: [0.02, 0.0, ...] },
+    ...
+    { t: 4.80, obs: {image: ..., joints: [...]}, action: [0.0, 0.0, ...] }
+  ]
+  success: true
+  duration_seconds: 4.8
+}
+    </pre>
+  </div>
+
+  <hr/>
+  <h3>What Makes a Good Demonstration?</h3>
+  <p>Research shows that demonstration quality matters more than quantity. A policy trained on 50 clean episodes often outperforms one trained on 500 noisy ones.</p>
+
+  <p><strong>Good demonstrations are:</strong></p>
+  <ul>
+    <li>✅ <strong>Smooth</strong> — No jerky movements or sudden stops</li>
+    <li>✅ <strong>Consistent</strong> — Same approach to the task every time</li>
+    <li>✅ <strong>Complete</strong> — Full task from start to finish, no partial episodes</li>
+    <li>✅ <strong>Diverse</strong> — Cover different object positions, orientations, speeds</li>
+    <li>✅ <strong>Recoverable</strong> — Include some recovery from near-failures</li>
+  </ul>
+
+  <p><strong>Bad demonstrations cause:</strong></p>
+  <ul>
+    <li>❌ <strong>Idle trajectories</strong> — Operator paused, robot stood still. Policy learns to do nothing.</li>
+    <li>❌ <strong>Jitter</strong> — Shaky control. Policy learns oscillating behavior.</li>
+    <li>❌ <strong>Over-correction</strong> — Operator corrected too aggressively. Policy learns unstable behavior.</li>
+    <li>❌ <strong>Mode collapse</strong> — All episodes look identical. Policy can't generalize.</li>
+  </ul>
+
+  <hr/>
+  <h3>Safety During Teleoperation</h3>
+  <ul>
+    <li>Always set joint limits before starting a session</li>
+    <li>Have an emergency stop accessible at all times</li>
+    <li>Start slow — reduce max speed until you're comfortable</li>
+    <li>Never leave a running robot unattended</li>
+    <li>If the robot behaves unexpectedly, stop immediately and investigate</li>
+  </ul>
+
+  <hr/>
+  <h3>Human-in-the-Loop (HIL) Data Collection</h3>
+  <p>
+    Advanced technique: deploy a partially-trained policy, let it run autonomously,
+    and have a human intervene only when it's about to fail. The intervention data
+    (recovery movements) is recorded and added to the training set. This produces
+    policies that know how to recover from mistakes — not just how to succeed from scratch.
+  </p>
+  <div style="background:#0D47A1; color:#fff; padding:12px; border-radius:8px;">
+    <strong>HIL Loop:</strong> Policy runs → Human watches → Human intervenes on failure → Recovery recorded → Policy fine-tuned → Repeat
+  </div>
+
+  <hr/>
+  <h3>Video: Teleoperation for Robot Learning</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/1nR7GCE1oFU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: Hugging Face LeRobot — teleoperation tutorial (public YouTube)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/hil_data_collection" target="_blank">HuggingFace: Human-in-the-Loop Data Collection</a></li>
+    <li><a href="https://huggingface.co/docs/lerobot/main/processors_robots_teleop" target="_blank">HuggingFace: Processors for Robots and Teleoperators</a></li>
+  </ul>
+</div>

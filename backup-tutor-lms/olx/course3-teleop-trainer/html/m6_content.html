@@ -1,0 +1,43 @@
+<h2>Module 6 — Data Curation</h2>
+  <p>Curation is the process of reviewing your collected data and deciding what to keep, what to discard, and what to improve. Quality over quantity is the rule in Physical AI.</p>
+
+  <h3>Why Curation Matters</h3>
+  <p>Research consistently shows that 50 clean, well-curated episodes outperform 500 noisy ones. Bad data doesn't just fail to help — it actively hurts training by teaching the model incorrect behaviors.</p>
+
+  <h3>The Curation Workflow</h3>
+  <ol>
+    <li><strong>Collect</strong> — Run your data collection sessions</li>
+    <li><strong>Review</strong> — Watch every episode in the media gallery</li>
+    <li><strong>Score</strong> — Rate each episode (good / acceptable / discard)</li>
+    <li><strong>Filter</strong> — Remove discarded episodes from the dataset</li>
+    <li><strong>Analyze</strong> — Check dataset statistics (coverage, diversity)</li>
+    <li><strong>Collect more</strong> — Fill gaps identified in analysis</li>
+  </ol>
+
+  <h3>Episode Scoring Criteria</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Score</th><th>Criteria</th></tr></thead>
+    <tbody>
+      <tr><td>✅ <strong>Good</strong></td><td>Task completed, smooth movement, clear video, no idle time, consistent approach</td></tr>
+      <tr><td>⚠️ <strong>Acceptable</strong></td><td>Task completed, minor issues (slight jitter, brief pause), still usable</td></tr>
+      <tr><td>❌ <strong>Discard</strong></td><td>Task not completed, major jitter, long idle periods, camera blocked, robot got stuck</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Identifying Idle Trajectories</h3>
+  <p>Idle trajectories are the most common data quality problem. They occur when the operator pauses during a session — the robot stands still while recording continues. The AI learns to do nothing.</p>
+  <p>Detection: In the telemetry charts, look for flat lines in joint velocity for more than 0.5 seconds. The platform can automatically flag these.</p>
+
+  <h3>Dataset Statistics to Check</h3>
+  <ul>
+    <li><strong>Success rate</strong> — What % of episodes completed the task? Target: &gt;90%</li>
+    <li><strong>Episode length distribution</strong> — Are episodes consistent in length? High variance = inconsistent behavior.</li>
+    <li><strong>Coverage</strong> — Are all planned object positions represented? Check your coverage plan from Module 2.</li>
+    <li><strong>Idle ratio</strong> — What % of frames have near-zero joint velocity? Target: &lt;5%</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/blog/robotdata/score-lerobot-episodes" target="_blank">HuggingFace: One-click Robot Data Curation</a></li>
+    <li><a href="https://arxiv.org/abs/2603.09056" target="_blank">Quality over Quantity: Demonstration Curation via Influence Functions</a></li>
+  </ul>

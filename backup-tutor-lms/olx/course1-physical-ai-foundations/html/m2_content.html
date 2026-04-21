@@ -1,0 +1,167 @@
+<div class="module-content">
+
+  <h2>Module 2 — Robot Fundamentals</h2>
+  <p class="module-intro">
+    Before you can train a robot, you need to understand what a robot perceives and
+    what it can do. This module covers the minimal set of concepts every Physical AI
+    practitioner needs — without the heavy mathematics of a traditional robotics course.
+  </p>
+
+  <hr/>
+
+  <h3>The 5 Subsystems of Any Robot</h3>
+  <p>Every robot — from a simple arm to a humanoid — has these five subsystems:</p>
+
+  <ol>
+    <li><strong>Perception</strong> — Cameras, depth sensors, LiDAR, microphones. What the robot sees and hears.</li>
+    <li><strong>State Estimation</strong> — Joint encoders, IMU, odometry. Where the robot's body parts are right now.</li>
+    <li><strong>Planning</strong> — Deciding what to do next. In Physical AI, this is replaced by a learned policy.</li>
+    <li><strong>Control</strong> — Translating decisions into motor commands. PID controllers, impedance control.</li>
+    <li><strong>Actuation</strong> — Motors, servos, pneumatics. The physical movement.</li>
+  </ol>
+
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace;">
+    Sensors → State → <span style="color:#76B900;">Policy (learned)</span> → Controller → Actuators
+  </div>
+
+  <p>
+    In Physical AI, the <strong>Policy</strong> replaces the classical Planning module.
+    Instead of hand-coded logic, a neural network maps observations directly to actions.
+  </p>
+
+  <hr/>
+
+  <h3>State Space — What the Robot Knows</h3>
+  <p>
+    The <strong>state</strong> is everything the robot can observe at a given moment.
+    For a robot arm, this typically includes:
+  </p>
+  <ul>
+    <li>Joint angles (e.g., 6 values for a 6-DOF arm, in radians)</li>
+    <li>Joint velocities</li>
+    <li>End-effector position and orientation (x, y, z, roll, pitch, yaw)</li>
+    <li>Camera images (RGB, depth)</li>
+    <li>Gripper state (open/closed, force)</li>
+  </ul>
+  <p>
+    For a mobile robot, state also includes position on a map, heading, and velocity.
+    The state is the input to your policy model.
+  </p>
+
+  <hr/>
+
+  <h3>Action Space — What the Robot Can Do</h3>
+  <p>
+    The <strong>action</strong> is what the robot outputs at each timestep.
+    Three common types:
+  </p>
+
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#1976D2; color:white;">
+        <th>Action Type</th>
+        <th>What It Controls</th>
+        <th>Use Case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Position control</td><td>Target joint angle</td><td>Slow, precise manipulation</td></tr>
+      <tr><td>Velocity control</td><td>Joint speed</td><td>Smooth continuous motion</td></tr>
+      <tr><td>Torque control</td><td>Motor force</td><td>Force-sensitive tasks (assembly, surgery)</td></tr>
+      <tr><td>End-effector delta</td><td>Change in gripper position</td><td>Most VLA models use this</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Most modern VLA models output <strong>end-effector deltas</strong> — small changes
+    in the gripper's position and orientation at each timestep. This is simpler to learn
+    than raw joint commands.
+  </p>
+
+  <hr/>
+
+  <h3>Control Frequency — Why It Matters</h3>
+  <p>
+    Control frequency is how many times per second the robot reads its state and
+    sends a new action. Typical values:
+  </p>
+  <ul>
+    <li><strong>10 Hz</strong> — Slow, suitable for high-level planning</li>
+    <li><strong>50 Hz</strong> — Standard for manipulation tasks</li>
+    <li><strong>500–1000 Hz</strong> — Required for force control and fast dynamics</li>
+  </ul>
+  <p>
+    Your dataset must be collected at the same frequency you'll run inference.
+    A policy trained on 10 Hz data will behave incorrectly if deployed at 50 Hz.
+  </p>
+
+  <hr/>
+
+  <h3>Degrees of Freedom (DOF)</h3>
+  <p>
+    DOF = the number of independent ways a robot can move.
+    A standard robot arm has 6 DOF — enough to reach any position and orientation
+    in 3D space. A humanoid has 30–50+ DOF. More DOF = more expressive, but harder
+    to control and harder to collect data for.
+  </p>
+
+  <hr/>
+
+  <h3>Sensors for Physical AI</h3>
+
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#1976D2; color:white;">
+        <th>Sensor</th>
+        <th>What It Provides</th>
+        <th>Used In</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>RGB Camera</td><td>Color images</td><td>VLA visual input (primary)</td></tr>
+      <tr><td>Depth Camera</td><td>Distance per pixel</td><td>3D scene understanding</td></tr>
+      <tr><td>Joint Encoders</td><td>Exact joint angles</td><td>State estimation, proprioception</td></tr>
+      <tr><td>Force/Torque Sensor</td><td>Contact forces</td><td>Assembly, grasping quality</td></tr>
+      <tr><td>IMU</td><td>Acceleration, orientation</td><td>Mobile robots, humanoids</td></tr>
+      <tr><td>Microphone</td><td>Audio / voice commands</td><td>Language-conditioned policies</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+
+  <h3>The Minimal Robot for Physical AI</h3>
+  <p>
+    You don't need a humanoid to start. The minimal setup for learning Physical AI is:
+  </p>
+  <ul>
+    <li>1 RGB camera (wrist-mounted or overhead)</li>
+    <li>6-DOF robot arm with joint encoders</li>
+    <li>Position control at 50 Hz</li>
+    <li>Simple gripper (open/close)</li>
+  </ul>
+  <p>
+    This is exactly what the SO-100/SO-101 arm (used in LeRobot tutorials) provides.
+    It costs ~$100 to build and is sufficient to train real manipulation policies.
+  </p>
+
+  <hr/>
+
+  <h3>Video: Robot Fundamentals for AI</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe
+      src="https://www.youtube.com/embed/ZR3GIwCFMpQ"
+      style="position:absolute; top:0; left:0; width:100%; height:100%;"
+      frameborder="0" allowfullscreen>
+    </iframe>
+  </div>
+  <p><em>Source: NVIDIA — Introduction to Robot Learning (public YouTube)</em></p>
+
+  <hr/>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/08-operating-so101.html" target="_blank">NVIDIA: Operating the SO-101 Robot</a></li>
+    <li><a href="https://huggingface.co/docs/lerobot/main/il_robots" target="_blank">HuggingFace LeRobot: Imitation Learning on Real Robots</a></li>
+  </ul>
+
+</div>

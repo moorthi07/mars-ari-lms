@@ -1,0 +1,31 @@
+<h2>Module 1 — From Operator to Trainer</h2>
+  <p>You already know how to control robots. Now you're going to understand <em>why</em> you're controlling them — and how to do it in a way that produces AI that actually works.</p>
+
+  <h3>What Is Imitation Learning?</h3>
+  <p>Imitation learning is how most Physical AI systems are trained today. The idea is simple: show the robot what to do by doing it yourself, record everything, and train a model to reproduce your behavior.</p>
+  <p>Your teleoperation sessions are the training data. The AI model learns by watching your demonstrations — your movements, your decisions, your timing. If your demonstrations are good, the AI learns good behavior. If they're inconsistent or noisy, the AI learns inconsistent, noisy behavior.</p>
+
+  <h3>The Episode Concept</h3>
+  <p>Every session you record is organized into <strong>episodes</strong>. An episode is one complete attempt at a task — from the starting position to task completion. Think of it like a single take in a film shoot.</p>
+  <p>Each episode contains:</p>
+  <ul>
+    <li>A sequence of camera images (what the robot saw)</li>
+    <li>A sequence of joint states (where the robot's body was)</li>
+    <li>A sequence of actions (what you commanded)</li>
+    <li>Timestamps (when each frame was captured)</li>
+    <li>A task description (what the robot was supposed to do)</li>
+    <li>A success flag (did the task complete?)</li>
+  </ul>
+
+  <h3>The Trainer's Mental Model</h3>
+  <p>As a trainer, you think differently from a controller. A controller asks: "Did I complete the task?" A trainer asks: "Did I complete the task in a way that an AI can learn from?"</p>
+  <div style="background:#0D47A1; color:#fff; padding:16px; border-radius:8px;">
+    <strong>Controller mindset:</strong> Complete the task.<br/>
+    <strong>Trainer mindset:</strong> Complete the task consistently, smoothly, and with enough variation that the AI can generalize.
+  </div>
+
+  <h3>Video: Introduction to Imitation Learning</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/1nR7GCE1oFU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: HuggingFace LeRobot — imitation learning overview (public)</em></p>

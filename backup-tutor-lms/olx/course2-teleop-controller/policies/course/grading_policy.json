@@ -1,0 +1,14 @@
+{
+  "GRADER": [
+    {
+      "type": "Quiz",
+      "min_count": 1,
+      "drop_count": 0,
+      "short_label": "Quiz",
+      "weight": 1.0
+    }
+  ],
+  "GRADE_CUTOFFS": {
+    "Pass": 0.7
+  }
+}

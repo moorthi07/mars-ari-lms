@@ -113,11 +113,12 @@ async function main() {
   })
 
   // Module 1
+  const mod1Id = 'aaaa0001-0000-4000-8000-000000000000'
   const mod1 = await prisma.module.upsert({
-    where:  { id: 'seed-mod-001' },
+    where:  { id: mod1Id },
     update: {},
     create: {
-      id:          'seed-mod-001',
+      id:          mod1Id,
       courseId:    course.id,
       title:       'Introduction to Teleoperation',
       description: 'Core concepts, history, and system overview.',
@@ -135,11 +136,12 @@ async function main() {
   ]
 
   for (const l of lessons1) {
+    const lessonId = `aaaa0001-0001-4000-8000-00000000000${l.position}`
     await prisma.lesson.upsert({
-      where:  { id: `seed-lesson-m1-${l.position}` },
+      where:  { id: lessonId },
       update: {},
       create: {
-        id:               `seed-lesson-m1-${l.position}`,
+        id:               lessonId,
         moduleId:         mod1.id,
         title:            l.title,
         contentType:      l.contentType as any,
@@ -158,11 +160,12 @@ async function main() {
   }
 
   // Module 2
+  const mod2Id = 'aaaa0002-0000-4000-8000-000000000000'
   const mod2 = await prisma.module.upsert({
-    where:  { id: 'seed-mod-002' },
+    where:  { id: mod2Id },
     update: {},
     create: {
-      id:          'seed-mod-002',
+      id:          mod2Id,
       courseId:    course.id,
       title:       'Control Interfaces and Haptics',
       description: 'Hands-on operation with various control devices.',
@@ -179,11 +182,12 @@ async function main() {
   ]
 
   for (const l of lessons2) {
+    const lessonId = `aaaa0002-0001-4000-8000-00000000000${l.position}`
     await prisma.lesson.upsert({
-      where:  { id: `seed-lesson-m2-${l.position}` },
+      where:  { id: lessonId },
       update: {},
       create: {
-        id:               `seed-lesson-m2-${l.position}`,
+        id:               lessonId,
         moduleId:         mod2.id,
         title:            l.title,
         contentType:      l.contentType as any,
@@ -196,11 +200,12 @@ async function main() {
   }
 
   // ── Demo webhook integration (teleop platform) ─────────────────────────────
+  const integration1Id = 'cccc0001-0000-4000-8000-000000000000'
   await prisma.integration.upsert({
-    where:  { id: 'seed-integration-001' },
+    where:  { id: integration1Id },
     update: {},
     create: {
-      id:            'seed-integration-001',
+      id:            integration1Id,
       tenantId:      tenant.id,
       name:          'Teleop Platform',
       description:   'Notifies the robotic teleoperation platform on course events',
@@ -211,11 +216,12 @@ async function main() {
     },
   })
 
+  const integration2Id = 'cccc0002-0000-4000-8000-000000000000'
   await prisma.integration.upsert({
-    where:  { id: 'seed-integration-002' },
+    where:  { id: integration2Id },
     update: {},
     create: {
-      id:          'seed-integration-002',
+      id:          integration2Id,
       tenantId:    tenant.id,
       name:        'Live Robot Lab',
       description: 'Opens the live robot lab environment from within a lesson',
@@ -226,11 +232,12 @@ async function main() {
   })
 
   // SDK integration example
+  const integration3Id = 'cccc0003-0000-4000-8000-000000000000'
   await prisma.integration.upsert({
-    where:  { id: 'seed-integration-003' },
+    where:  { id: integration3Id },
     update: {},
     create: {
-      id:          'seed-integration-003',
+      id:          integration3Id,
       tenantId:    tenant.id,
       name:        'TeleTrain SDK',
       description: 'Embeds TeleTrain data collection widget directly in lessons',

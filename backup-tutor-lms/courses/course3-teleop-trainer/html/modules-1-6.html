@@ -1,0 +1,275 @@
+<div class="module-content">
+
+<!-- MODULE 1 -->
+<section id="module1">
+  <h2>Module 1 — From Operator to Trainer</h2>
+  <p>You already know how to control robots. Now you're going to understand <em>why</em> you're controlling them — and how to do it in a way that produces AI that actually works.</p>
+
+  <h3>What Is Imitation Learning?</h3>
+  <p>Imitation learning is how most Physical AI systems are trained today. The idea is simple: show the robot what to do by doing it yourself, record everything, and train a model to reproduce your behavior.</p>
+  <p>Your teleoperation sessions are the training data. The AI model learns by watching your demonstrations — your movements, your decisions, your timing. If your demonstrations are good, the AI learns good behavior. If they're inconsistent or noisy, the AI learns inconsistent, noisy behavior.</p>
+
+  <h3>The Episode Concept</h3>
+  <p>Every session you record is organized into <strong>episodes</strong>. An episode is one complete attempt at a task — from the starting position to task completion. Think of it like a single take in a film shoot.</p>
+  <p>Each episode contains:</p>
+  <ul>
+    <li>A sequence of camera images (what the robot saw)</li>
+    <li>A sequence of joint states (where the robot's body was)</li>
+    <li>A sequence of actions (what you commanded)</li>
+    <li>Timestamps (when each frame was captured)</li>
+    <li>A task description (what the robot was supposed to do)</li>
+    <li>A success flag (did the task complete?)</li>
+  </ul>
+
+  <h3>The Trainer's Mental Model</h3>
+  <p>As a trainer, you think differently from a controller. A controller asks: "Did I complete the task?" A trainer asks: "Did I complete the task in a way that an AI can learn from?"</p>
+  <div style="background:#0D47A1; color:#fff; padding:16px; border-radius:8px;">
+    <strong>Controller mindset:</strong> Complete the task.<br/>
+    <strong>Trainer mindset:</strong> Complete the task consistently, smoothly, and with enough variation that the AI can generalize.
+  </div>
+
+  <h3>Video: Introduction to Imitation Learning</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/1nR7GCE1oFU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: HuggingFace LeRobot — imitation learning overview (public)</em></p>
+</section>
+
+<hr/>
+
+<!-- MODULE 2 -->
+<section id="module2">
+  <h2>Module 2 — Designing a Data Collection Session</h2>
+  <p>A well-designed session produces usable data. A poorly designed session wastes everyone's time. This module teaches you how to plan before you collect.</p>
+
+  <h3>Task Decomposition</h3>
+  <p>Before collecting data, break your task into clear, atomic steps. Example for "pick and place red cube":</p>
+  <ol>
+    <li>Start position: arm at home, gripper open</li>
+    <li>Approach: move arm above the cube</li>
+    <li>Descend: lower arm to grasp height</li>
+    <li>Grasp: close gripper</li>
+    <li>Lift: raise arm with cube</li>
+    <li>Transport: move arm to target location</li>
+    <li>Place: lower arm to placement height</li>
+    <li>Release: open gripper</li>
+    <li>Retract: return arm to home position</li>
+  </ol>
+  <p>Each step should be consistent across all episodes. If step 3 looks different in every episode, the AI can't learn it.</p>
+
+  <h3>Episode Length</h3>
+  <p>Keep episodes short and focused. A 5-second pick-and-place is better than a 30-second wandering session. Shorter episodes = cleaner data = faster training.</p>
+  <ul>
+    <li>Simple manipulation: 3-10 seconds per episode</li>
+    <li>Multi-step tasks: 10-30 seconds per episode</li>
+    <li>Navigation tasks: 30-120 seconds per episode</li>
+  </ul>
+
+  <h3>Reset Procedures</h3>
+  <p>Every episode must start from the same (or similar) starting state. Define your reset procedure before collecting:</p>
+  <ul>
+    <li>Where does the robot arm start? (home position)</li>
+    <li>Where is the object placed? (fixed position, or randomized within a range?)</li>
+    <li>What is the camera angle?</li>
+    <li>What is the lighting?</li>
+  </ul>
+  <p>Write this down. Follow it every time. Consistency in resets = consistency in data.</p>
+
+  <h3>Coverage Planning</h3>
+  <p>Coverage means collecting data across the full range of conditions the AI will encounter. Plan for variation:</p>
+  <ul>
+    <li>Object position: collect from 5 different positions</li>
+    <li>Object orientation: collect from 3 different rotations</li>
+    <li>Approach angle: collect from 2 different approach directions</li>
+  </ul>
+  <p>A dataset with 100 episodes from one position is less useful than 50 episodes spread across 5 positions.</p>
+</section>
+
+<hr/>
+
+<!-- MODULE 3 -->
+<section id="module3">
+  <h2>Module 3 — Telemetry Data</h2>
+  <p>Telemetry is the stream of sensor data coming from the robot in real-time. Understanding it helps you monitor data quality, detect problems, and understand what the AI will learn from.</p>
+
+  <h3>What Is Telemetry?</h3>
+  <p>Every sensor on the robot produces a continuous stream of measurements. The platform collects and stores all of this during your sessions:</p>
+  <ul>
+    <li><strong>Joint positions</strong> — Angle of each joint in radians, updated at 50 Hz</li>
+    <li><strong>Joint velocities</strong> — Speed of each joint</li>
+    <li><strong>End-effector pose</strong> — Position and orientation of the gripper in 3D space</li>
+    <li><strong>Battery level</strong> — Remaining power percentage</li>
+    <li><strong>Speed</strong> — Linear and angular velocity (for mobile robots)</li>
+    <li><strong>Signal strength</strong> — Connection quality</li>
+    <li><strong>GPS/position</strong> — Location (for outdoor robots)</li>
+  </ul>
+
+  <h3>Reading the Analytics Charts</h3>
+  <p>The Analytics panel (right side of dashboard) shows live charts of this data. As a trainer, you should monitor these during collection:</p>
+  <ul>
+    <li><strong>Speed chart</strong> — Should be smooth curves, not spikes. Spikes = jerky movement = bad data.</li>
+    <li><strong>Joint angle chart</strong> — Should show smooth transitions. Flat lines = robot not moving (idle).</li>
+    <li><strong>Battery chart</strong> — Should decrease gradually. Sudden drops = hardware issue.</li>
+  </ul>
+
+  <h3>Anomaly Detection</h3>
+  <p>Watch for these warning signs in telemetry:</p>
+  <ul>
+    <li>❌ <strong>Flat joint angles for &gt;1 second</strong> — Robot is idle. Stop and restart the episode.</li>
+    <li>❌ <strong>Speed spikes &gt;3x normal</strong> — Jerky movement. Discard this episode.</li>
+    <li>❌ <strong>Battery drop &gt;5% in 10 seconds</strong> — Hardware issue. Stop session.</li>
+    <li>❌ <strong>Signal strength below 2 bars</strong> — Connection unstable. Pause collection.</li>
+  </ul>
+
+  <h3>TimescaleDB — How Data Is Stored</h3>
+  <p>The platform stores all telemetry in a time-series database (TimescaleDB). This means you can query historical data, compare sessions, and analyze trends over time. The data is organized by robot ID and timestamp, making it easy to retrieve any episode for review or training.</p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/blog/robotdata/gigo" target="_blank">HuggingFace: Robot Data Quality — Garbage In, Garbage Out</a></li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 4 -->
+<section id="module4">
+  <h2>Module 4 — Video Data Quality</h2>
+  <p>Vision is the primary input to VLA models. The quality of your video data directly determines whether the AI can see what it needs to see to learn the task.</p>
+
+  <h3>Why Vision Matters So Much</h3>
+  <p>VLA models take camera images as their primary input. If the image is blurry, dark, occluded, or inconsistent, the model can't learn from it. A dataset with perfect joint data but poor images is nearly useless for vision-based policies.</p>
+
+  <h3>Camera Placement</h3>
+  <p>Two camera views are standard for manipulation tasks:</p>
+  <ul>
+    <li><strong>Wrist camera</strong> — Mounted on the robot's wrist, near the gripper. Shows what the gripper is doing. Essential for grasping tasks.</li>
+    <li><strong>Overhead/fixed camera</strong> — Fixed position above the workspace. Shows the full scene. Essential for navigation and placement tasks.</li>
+  </ul>
+  <p>Collect both views when possible. Models trained on multi-view data generalize better.</p>
+
+  <h3>Lighting Requirements</h3>
+  <ul>
+    <li>✅ Even, diffuse lighting — no harsh shadows</li>
+    <li>✅ Consistent lighting across all episodes in a session</li>
+    <li>✅ Bright enough to see object colors clearly</li>
+    <li>❌ Direct sunlight causing glare</li>
+    <li>❌ Backlighting that silhouettes the robot</li>
+    <li>❌ Flickering lights (fluorescent)</li>
+  </ul>
+
+  <h3>Common Video Problems</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Blurry image</td><td>Camera moving too fast, focus issue</td><td>Slow down movements, check camera mount</td></tr>
+      <tr><td>Dark image</td><td>Poor lighting, lens dirty</td><td>Add lighting, clean lens</td></tr>
+      <tr><td>Occlusion</td><td>Robot arm blocking camera view</td><td>Reposition camera or change approach angle</td></tr>
+      <tr><td>Inconsistent framing</td><td>Camera moved between episodes</td><td>Fix camera mount, don't touch between episodes</td></tr>
+      <tr><td>Lag/stuttering</td><td>Poor connection, encoding issues</td><td>Check signal strength, reduce resolution</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Frame Rate</h3>
+  <p>Collect at 30 FPS minimum. 60 FPS is better for fast manipulation tasks. The frame rate must match what you'll use during inference — a policy trained on 30 FPS data will behave incorrectly if deployed at 10 FPS.</p>
+
+  <h3>Video: Camera Setup for Robot Learning</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+</section>
+
+<hr/>
+
+<!-- MODULE 5 -->
+<section id="module5">
+  <h2>Module 5 — Audio & Language Pairing</h2>
+  <p>Language-conditioned policies need paired audio and action data. This module teaches you how to collect voice data that makes your dataset useful for VLA training.</p>
+
+  <h3>Why Language Pairing Matters</h3>
+  <p>A VLA model takes three inputs: image, language instruction, and robot state. If your dataset doesn't include language annotations, you can't train a language-conditioned policy. The language tells the model <em>what</em> the robot is supposed to be doing — without it, the model can only learn to repeat the same task, not generalize to new instructions.</p>
+
+  <h3>The Whisper Transcription Pipeline</h3>
+  <p>The platform uses OpenAI Whisper to automatically transcribe your voice commands during sessions. The transcription is stored alongside the video and joint data, creating a synchronized (image, language, action) dataset.</p>
+  <p>Workflow:</p>
+  <ol>
+    <li>Enable voice recording before starting your session</li>
+    <li>Speak your task description at the start of each episode: "Pick up the red cube and place it in the bin"</li>
+    <li>Speak action labels as you perform them: "approaching cube", "grasping", "lifting", "placing"</li>
+    <li>The platform transcribes and timestamps everything automatically</li>
+  </ol>
+
+  <h3>Good Language Annotation Habits</h3>
+  <ul>
+    <li>✅ Describe the task, not the controls: "pick up the cube" not "move arm left"</li>
+    <li>✅ Use consistent vocabulary across episodes: always "red cube", not sometimes "red block"</li>
+    <li>✅ Speak at the start of each episode, not mid-task</li>
+    <li>✅ Keep descriptions short and specific: 5-10 words</li>
+    <li>❌ Don't narrate every micro-movement</li>
+    <li>❌ Don't use ambiguous language: "that thing" instead of "red cube"</li>
+  </ul>
+
+  <h3>Audio Quality</h3>
+  <ul>
+    <li>Use a headset microphone if possible — reduces background noise</li>
+    <li>Speak at normal volume and pace</li>
+    <li>Minimize background noise (fans, music, conversations)</li>
+    <li>Check transcription accuracy in the session review — if Whisper is getting words wrong, speak more clearly</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/main/processors_robots_teleop" target="_blank">HuggingFace: Processors for Robots and Teleoperators</a></li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 6 -->
+<section id="module6">
+  <h2>Module 6 — Data Curation</h2>
+  <p>Curation is the process of reviewing your collected data and deciding what to keep, what to discard, and what to improve. Quality over quantity is the rule in Physical AI.</p>
+
+  <h3>Why Curation Matters</h3>
+  <p>Research consistently shows that 50 clean, well-curated episodes outperform 500 noisy ones. Bad data doesn't just fail to help — it actively hurts training by teaching the model incorrect behaviors.</p>
+
+  <h3>The Curation Workflow</h3>
+  <ol>
+    <li><strong>Collect</strong> — Run your data collection sessions</li>
+    <li><strong>Review</strong> — Watch every episode in the media gallery</li>
+    <li><strong>Score</strong> — Rate each episode (good / acceptable / discard)</li>
+    <li><strong>Filter</strong> — Remove discarded episodes from the dataset</li>
+    <li><strong>Analyze</strong> — Check dataset statistics (coverage, diversity)</li>
+    <li><strong>Collect more</strong> — Fill gaps identified in analysis</li>
+  </ol>
+
+  <h3>Episode Scoring Criteria</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Score</th><th>Criteria</th></tr></thead>
+    <tbody>
+      <tr><td>✅ <strong>Good</strong></td><td>Task completed, smooth movement, clear video, no idle time, consistent approach</td></tr>
+      <tr><td>⚠️ <strong>Acceptable</strong></td><td>Task completed, minor issues (slight jitter, brief pause), still usable</td></tr>
+      <tr><td>❌ <strong>Discard</strong></td><td>Task not completed, major jitter, long idle periods, camera blocked, robot got stuck</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Identifying Idle Trajectories</h3>
+  <p>Idle trajectories are the most common data quality problem. They occur when the operator pauses during a session — the robot stands still while recording continues. The AI learns to do nothing.</p>
+  <p>Detection: In the telemetry charts, look for flat lines in joint velocity for more than 0.5 seconds. The platform can automatically flag these.</p>
+
+  <h3>Dataset Statistics to Check</h3>
+  <ul>
+    <li><strong>Success rate</strong> — What % of episodes completed the task? Target: &gt;90%</li>
+    <li><strong>Episode length distribution</strong> — Are episodes consistent in length? High variance = inconsistent behavior.</li>
+    <li><strong>Coverage</strong> — Are all planned object positions represented? Check your coverage plan from Module 2.</li>
+    <li><strong>Idle ratio</strong> — What % of frames have near-zero joint velocity? Target: &lt;5%</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/blog/robotdata/score-lerobot-episodes" target="_blank">HuggingFace: One-click Robot Data Curation</a></li>
+    <li><a href="https://arxiv.org/abs/2603.09056" target="_blank">Quality over Quantity: Demonstration Curation via Influence Functions</a></li>
+  </ul>
+</section>
+
+</div>

@@ -1,0 +1,88 @@
+<div class="module-content">
+  <h2>Module 3 — Simulation Environments</h2>
+  <p class="module-intro">Simulation is a data generator. Before you can train a robot policy, you need thousands of episodes. Real hardware is slow, expensive, and breaks. Simulation gives you unlimited, free, parallelizable data.</p>
+
+  <hr/>
+  <h3>Why Simulate?</h3>
+  <ul>
+    <li><strong>Safe</strong> — No hardware damage when the policy fails</li>
+    <li><strong>Fast</strong> — Run 1000 episodes in parallel on a GPU</li>
+    <li><strong>Cheap</strong> — No wear on motors, no broken grippers</li>
+    <li><strong>Controllable</strong> — Change lighting, friction, object positions programmatically</li>
+    <li><strong>Reproducible</strong> — Same seed = same episode every time</li>
+  </ul>
+
+  <hr/>
+  <h3>The Three Simulators You Need to Know</h3>
+
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Simulator</th><th>Best For</th><th>Cost</th><th>Hardware</th></tr></thead>
+    <tbody>
+      <tr><td><strong>MuJoCo</strong> (DeepMind)</td><td>Fast physics, manipulation, RL research</td><td>Free</td><td>CPU/Browser</td></tr>
+      <tr><td><strong>Gazebo</strong> (Open Robotics)</td><td>ROS integration, mobile robots, outdoor</td><td>Free</td><td>CPU</td></tr>
+      <tr><td><strong>Isaac Sim</strong> (NVIDIA)</td><td>Photorealistic rendering, sim-to-real, humanoids</td><td>Free (GPU required)</td><td>GPU (L4+)</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Recommendation:</strong> Start with MuJoCo. It runs in the browser (MuJoCo WASM), has excellent Python bindings, and is the standard for manipulation research. Move to Isaac Sim when you need photorealistic rendering for sim-to-real transfer.</p>
+
+  <hr/>
+  <h3>Robot Models: URDF, MJCF, USD</h3>
+  <p>A robot model is a file that describes the robot's physical structure:</p>
+  <ul>
+    <li><strong>URDF</strong> (Unified Robot Description Format) — XML, used by ROS and Gazebo. Describes links, joints, mass, collision geometry.</li>
+    <li><strong>MJCF</strong> (MuJoCo XML) — MuJoCo's native format. More expressive for contact physics.</li>
+    <li><strong>USD</strong> (Universal Scene Description) — NVIDIA's format for Isaac Sim. Supports photorealistic materials and complex scenes.</li>
+  </ul>
+  <p>Most robot manufacturers provide URDF files. Tools like <code>urdf2mjcf</code> convert between formats.</p>
+
+  <hr/>
+  <h3>The Simulation Control Loop</h3>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace; font-size:13px;">
+    <pre>
+while not done:
+    obs = env.get_observation()    # camera image + joint states
+    action = policy(obs)           # your model or teleop input
+    env.step(action)               # physics advances one timestep
+    reward = env.get_reward()      # optional, for RL
+    data.record(obs, action)       # save to dataset
+    </pre>
+  </div>
+  <p>This loop is identical whether you're collecting teleop data, running a trained policy, or doing RL. The only thing that changes is where <code>action</code> comes from.</p>
+
+  <hr/>
+  <h3>Reset and Determinism</h3>
+  <p>
+    Every training episode starts with a <strong>reset</strong> — the environment returns to a known starting state. This is critical for:
+  </p>
+  <ul>
+    <li>Reproducibility (same seed = same episode)</li>
+    <li>Curriculum learning (start easy, gradually increase difficulty)</li>
+    <li>Domain randomization (randomize object positions, lighting, friction on each reset)</li>
+  </ul>
+  <p>Always set a random seed when collecting data. This lets you reproduce any episode for debugging.</p>
+
+  <hr/>
+  <h3>Common Simulation Mistakes</h3>
+  <ul>
+    <li>❌ <strong>No noise</strong> — Real sensors are noisy. Add Gaussian noise to joint readings and camera images.</li>
+    <li>❌ <strong>Perfect friction</strong> — Real surfaces slip. Randomize friction coefficients.</li>
+    <li>❌ <strong>No latency</strong> — Real control loops have delays. Add action delay of 1-3 timesteps.</li>
+    <li>❌ <strong>Unrealistic lighting</strong> — Real cameras see shadows and glare. Vary lighting in sim.</li>
+  </ul>
+  <p>These mistakes cause the <strong>sim-to-real gap</strong> — policies that work perfectly in sim but fail on real hardware. We cover this in Module 8.</p>
+
+  <hr/>
+  <h3>Video: MuJoCo in 10 Minutes</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/0ORsj_E17B0" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: DeepMind MuJoCo — official tutorial (public YouTube)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://mujoco.readthedocs.io/en/stable/overview.html" target="_blank">MuJoCo Documentation</a></li>
+    <li><a href="https://isaac-sim.github.io/IsaacLab/main/source/overview/imitation-learning/teleop_imitation.html" target="_blank">Isaac Lab: Teleoperation and Imitation Learning</a></li>
+    <li><a href="https://gazebosim.org/docs" target="_blank">Gazebo Documentation</a></li>
+  </ul>
+</div>

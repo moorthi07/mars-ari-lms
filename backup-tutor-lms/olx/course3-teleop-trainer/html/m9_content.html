@@ -1,0 +1,54 @@
+<h2>Module 9 — Configuring VLA & VLM Models</h2>
+  <p>As a trainer, you don't build models from scratch — you configure and feed them. This module explains what you control and what you don't, and how to set up a model training run.</p>
+
+  <h3>What a Trainer Controls</h3>
+  <p>You are not a model researcher. Your job is to:</p>
+  <ul>
+    <li>Prepare the dataset (Modules 2-7)</li>
+    <li>Select the right model architecture for your task</li>
+    <li>Configure training hyperparameters</li>
+    <li>Monitor training progress</li>
+    <li>Evaluate the trained policy</li>
+    <li>Decide when to collect more data</li>
+  </ul>
+
+  <h3>Choosing a Model</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Model</th><th>Best For</th><th>Data Needed</th><th>Training Time</th></tr></thead>
+    <tbody>
+      <tr><td>ACT (Action Chunking Transformer)</td><td>Dexterous manipulation, fast tasks</td><td>50-200 episodes</td><td>1-4 hours (GPU)</td></tr>
+      <tr><td>Diffusion Policy</td><td>Multi-modal tasks, complex trajectories</td><td>100-500 episodes</td><td>4-12 hours (GPU)</td></tr>
+      <tr><td>SmolVLA</td><td>Language-conditioned, multi-task</td><td>500+ episodes</td><td>8-24 hours (GPU)</td></tr>
+      <tr><td>OpenVLA (fine-tune)</td><td>Language-conditioned, strong baseline</td><td>200+ episodes</td><td>4-8 hours (GPU)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Training Hyperparameters</h3>
+  <p>These are the parameters you'll typically configure:</p>
+  <ul>
+    <li><strong>Batch size</strong> — How many episodes to process at once. Larger = faster but needs more GPU memory. Start with 32.</li>
+    <li><strong>Learning rate</strong> — How fast the model updates. Too high = unstable training. Too low = slow convergence. Start with 1e-4.</li>
+    <li><strong>Training steps</strong> — How long to train. More steps = better performance up to a point. Monitor validation loss to decide when to stop.</li>
+    <li><strong>Chunk size</strong> — For ACT: how many future actions to predict at once. Typical: 50-100 frames.</li>
+  </ul>
+
+  <h3>Monitoring Training</h3>
+  <p>Watch these metrics during training:</p>
+  <ul>
+    <li><strong>Training loss</strong> — Should decrease steadily. If it plateaus early, you may need more data.</li>
+    <li><strong>Validation loss</strong> — Should decrease with training loss. If it increases while training loss decreases, you're overfitting.</li>
+    <li><strong>Success rate in sim</strong> — Run evaluation rollouts every N steps. This is the real metric.</li>
+  </ul>
+
+  <h3>When to Stop Training</h3>
+  <ul>
+    <li>Validation loss has plateaued for 10+ epochs</li>
+    <li>Success rate in sim has plateaued</li>
+    <li>Success rate in sim is &gt;80% (good enough to deploy and collect HIL data)</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://github.com/openvla/openvla" target="_blank">OpenVLA: Fine-tuning guide</a></li>
+    <li><a href="https://huggingface.co/docs/lerobot/hilserl" target="_blank">HuggingFace: HIL-SERL Training Workflow</a></li>
+  </ul>

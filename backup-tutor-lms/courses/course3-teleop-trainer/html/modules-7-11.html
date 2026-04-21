@@ -1,0 +1,304 @@
+<div class="module-content">
+
+<!-- MODULE 7 -->
+<section id="module7">
+  <h2>Module 7 — Data Labeling</h2>
+  <p>Labels are the supervision signal that tells the AI what each part of your data means. Good labels enable better generalization. This module covers what to label and how.</p>
+
+  <h3>What Labels Does a VLA Need?</h3>
+  <p>For a VLA model, the primary labels are already in your dataset — the actions you performed. But additional labels significantly improve training:</p>
+  <ul>
+    <li><strong>Task description</strong> — Natural language description of the full task (from Module 5)</li>
+    <li><strong>Phase labels</strong> — Which phase of the task is this frame? (approach, grasp, lift, place)</li>
+    <li><strong>Object labels</strong> — What objects are in the scene? Where are they?</li>
+    <li><strong>Success/failure</strong> — Did this episode succeed?</li>
+    <li><strong>Key frames</strong> — Which frames are most important? (moment of grasp, moment of release)</li>
+  </ul>
+
+  <h3>Phase Labeling</h3>
+  <p>Phase labels divide an episode into meaningful segments. This helps the model understand task structure — not just "what action to take" but "what stage of the task am I in?"</p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace; font-size:13px;">
+    <pre>
+Episode phases for "pick and place":
+  t=0.0 to t=1.2  → phase: "approach"
+  t=1.2 to t=1.8  → phase: "grasp"
+  t=1.8 to t=2.5  → phase: "lift"
+  t=2.5 to t=3.8  → phase: "transport"
+  t=3.8 to t=4.5  → phase: "place"
+  t=4.5 to t=5.0  → phase: "retract"
+    </pre>
+  </div>
+
+  <h3>Object Annotation</h3>
+  <p>For vision-based policies, knowing where objects are in the image helps the model learn faster. Basic object annotation includes:</p>
+  <ul>
+    <li>Bounding boxes around target objects</li>
+    <li>Object class labels ("red cube", "blue bin")</li>
+    <li>Object state ("grasped", "released", "in-bin")</li>
+  </ul>
+  <p>Tools: Label Studio (open source), Roboflow (free tier), or the platform's built-in labeling interface.</p>
+
+  <h3>Key Frame Selection</h3>
+  <p>Not all frames are equally important. Key frames are the moments that define the task:</p>
+  <ul>
+    <li>The frame just before grasping (gripper approaching object)</li>
+    <li>The frame of successful grasp (gripper closed on object)</li>
+    <li>The frame of placement (object at target location)</li>
+  </ul>
+  <p>Some training methods (like ACT) use key frames to define action chunks — sequences of actions that lead to the next key frame.</p>
+
+  <h3>Labeling Efficiency Tips</h3>
+  <ul>
+    <li>Label in batches — do all episodes of one task type together</li>
+    <li>Use keyboard shortcuts in labeling tools</li>
+    <li>Label phase boundaries first (fast), then object annotations (slower)</li>
+    <li>Have a second person review 10% of labels for consistency</li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 8 -->
+<section id="module8">
+  <h2>Module 8 — Simulation for Data Generation</h2>
+  <p>Real robot data is expensive and slow to collect. Simulation lets you generate thousands of episodes automatically. This module covers when and how to use simulation to augment your real data.</p>
+
+  <h3>When to Use Simulation</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Use Simulation When...</th><th>Use Real Data When...</th></tr></thead>
+    <tbody>
+      <tr><td>You need 1000+ episodes</td><td>You need &lt;200 episodes</td></tr>
+      <tr><td>Task is well-defined and repeatable</td><td>Task requires real-world nuance</td></tr>
+      <tr><td>You want to test policy variations quickly</td><td>You're doing final validation</td></tr>
+      <tr><td>Hardware is unavailable or expensive</td><td>Sim-to-real gap is critical</td></tr>
+      <tr><td>You want domain randomization</td><td>You need exact real-world physics</td></tr>
+    </tbody>
+  </table>
+
+  <h3>MuJoCo — Free, Browser-Based</h3>
+  <p>MuJoCo runs in your browser (no GPU needed). Best for:</p>
+  <ul>
+    <li>Quick prototyping and testing</li>
+    <li>Manipulation tasks with simple physics</li>
+    <li>Learning and experimentation</li>
+  </ul>
+  <p>Access it directly in the MarsGeo platform — no setup required.</p>
+
+  <h3>Genesis & Gazebo — Cloud CPU (Starter+)</h3>
+  <p>More capable simulators that run on cloud CPU instances. Best for:</p>
+  <ul>
+    <li>More complex physics (fluid, deformable objects)</li>
+    <li>Mobile robot navigation</li>
+    <li>Outdoor environments</li>
+  </ul>
+  <p>Requires a Starter subscription. Billed per hour of compute time.</p>
+
+  <h3>Isaac Sim — Cloud GPU (Pro+)</h3>
+  <p>NVIDIA's photorealistic simulator. Best for:</p>
+  <ul>
+    <li>Sim-to-real transfer (photorealistic rendering reduces the gap)</li>
+    <li>Large-scale data generation (run 100 parallel environments)</li>
+    <li>Humanoid and complex robot simulation</li>
+  </ul>
+  <p>Requires a Pro subscription. Significantly more expensive but produces the best sim-to-real results.</p>
+
+  <h3>Domain Randomization in Practice</h3>
+  <p>When generating sim data, always enable domain randomization:</p>
+  <ul>
+    <li>Randomize object position: ±5cm from nominal</li>
+    <li>Randomize object color/texture: 5-10 variations</li>
+    <li>Randomize lighting: 3-5 lighting configurations</li>
+    <li>Randomize camera position: ±2cm, ±5°</li>
+  </ul>
+  <p>This makes your sim data more diverse and reduces the sim-to-real gap when you deploy to real hardware.</p>
+
+  <h3>Video: Isaac Lab for Data Generation</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: NVIDIA Isaac Lab tutorials (public YouTube)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://isaac-sim.github.io/IsaacLab/main/source/overview/imitation-learning/teleop_imitation.html" target="_blank">Isaac Lab: Teleoperation and Imitation Learning</a></li>
+    <li><a href="https://arxiv.org/abs/2508.06547" target="_blank">Tutorial: Collecting Simulated Data for VLA Models</a></li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 9 -->
+<section id="module9">
+  <h2>Module 9 — Configuring VLA & VLM Models</h2>
+  <p>As a trainer, you don't build models from scratch — you configure and feed them. This module explains what you control and what you don't, and how to set up a model training run.</p>
+
+  <h3>What a Trainer Controls</h3>
+  <p>You are not a model researcher. Your job is to:</p>
+  <ul>
+    <li>Prepare the dataset (Modules 2-7)</li>
+    <li>Select the right model architecture for your task</li>
+    <li>Configure training hyperparameters</li>
+    <li>Monitor training progress</li>
+    <li>Evaluate the trained policy</li>
+    <li>Decide when to collect more data</li>
+  </ul>
+
+  <h3>Choosing a Model</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Model</th><th>Best For</th><th>Data Needed</th><th>Training Time</th></tr></thead>
+    <tbody>
+      <tr><td>ACT (Action Chunking Transformer)</td><td>Dexterous manipulation, fast tasks</td><td>50-200 episodes</td><td>1-4 hours (GPU)</td></tr>
+      <tr><td>Diffusion Policy</td><td>Multi-modal tasks, complex trajectories</td><td>100-500 episodes</td><td>4-12 hours (GPU)</td></tr>
+      <tr><td>SmolVLA</td><td>Language-conditioned, multi-task</td><td>500+ episodes</td><td>8-24 hours (GPU)</td></tr>
+      <tr><td>OpenVLA (fine-tune)</td><td>Language-conditioned, strong baseline</td><td>200+ episodes</td><td>4-8 hours (GPU)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Training Hyperparameters</h3>
+  <p>These are the parameters you'll typically configure:</p>
+  <ul>
+    <li><strong>Batch size</strong> — How many episodes to process at once. Larger = faster but needs more GPU memory. Start with 32.</li>
+    <li><strong>Learning rate</strong> — How fast the model updates. Too high = unstable training. Too low = slow convergence. Start with 1e-4.</li>
+    <li><strong>Training steps</strong> — How long to train. More steps = better performance up to a point. Monitor validation loss to decide when to stop.</li>
+    <li><strong>Chunk size</strong> — For ACT: how many future actions to predict at once. Typical: 50-100 frames.</li>
+  </ul>
+
+  <h3>Monitoring Training</h3>
+  <p>Watch these metrics during training:</p>
+  <ul>
+    <li><strong>Training loss</strong> — Should decrease steadily. If it plateaus early, you may need more data.</li>
+    <li><strong>Validation loss</strong> — Should decrease with training loss. If it increases while training loss decreases, you're overfitting.</li>
+    <li><strong>Success rate in sim</strong> — Run evaluation rollouts every N steps. This is the real metric.</li>
+  </ul>
+
+  <h3>When to Stop Training</h3>
+  <ul>
+    <li>Validation loss has plateaued for 10+ epochs</li>
+    <li>Success rate in sim has plateaued</li>
+    <li>Success rate in sim is &gt;80% (good enough to deploy and collect HIL data)</li>
+  </ul>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://github.com/openvla/openvla" target="_blank">OpenVLA: Fine-tuning guide</a></li>
+    <li><a href="https://huggingface.co/docs/lerobot/hilserl" target="_blank">HuggingFace: HIL-SERL Training Workflow</a></li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 10 -->
+<section id="module10">
+  <h2>Module 10 — Managing Data Collection Jobs</h2>
+  <p>As a trainer, you're often the client on TeleOp Hub — posting jobs for controllers to complete, reviewing their work, and managing the data pipeline.</p>
+
+  <h3>Writing a Good Job Description</h3>
+  <p>A clear job description produces better data. Include:</p>
+  <ul>
+    <li><strong>Task description</strong> — Exactly what the robot should do, step by step</li>
+    <li><strong>Robot type</strong> — Which robot, which controls to use</li>
+    <li><strong>Episode requirements</strong> — How many episodes, how long each should be</li>
+    <li><strong>Quality criteria</strong> — What makes a good episode (smooth movement, specific approach angle, etc.)</li>
+    <li><strong>Reset procedure</strong> — Exactly how to reset between episodes</li>
+    <li><strong>What to avoid</strong> — Common mistakes to prevent</li>
+  </ul>
+
+  <h3>Example Job Description</h3>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-size:13px;">
+    <strong>Task:</strong> Pick up the red cube from the table and place it in the blue bin.<br/><br/>
+    <strong>Robot:</strong> 6-DOF arm with wrist camera. Use arm joystick controls.<br/><br/>
+    <strong>Episodes needed:</strong> 100 successful episodes<br/><br/>
+    <strong>Episode length:</strong> 5-10 seconds<br/><br/>
+    <strong>Reset:</strong> Return arm to home position. Place red cube at marked position (center of table, 30cm from arm base).<br/><br/>
+    <strong>Quality criteria:</strong> Smooth approach from above. Gripper fully closed before lifting. No pauses &gt;0.5s.<br/><br/>
+    <strong>Avoid:</strong> Approaching from the side. Dropping the cube. Idle time.
+  </div>
+
+  <h3>Reviewing Submitted Work</h3>
+  <p>When controllers submit sessions, review them before accepting:</p>
+  <ol>
+    <li>Watch 10% of episodes in the media gallery</li>
+    <li>Check telemetry charts for idle time and jitter</li>
+    <li>Verify task completion rate (&gt;90% target)</li>
+    <li>Check episode length consistency</li>
+    <li>Accept or request revisions</li>
+  </ol>
+
+  <h3>Quality Gates</h3>
+  <p>Set minimum quality thresholds before accepting a batch:</p>
+  <ul>
+    <li>Task success rate: &gt;90%</li>
+    <li>Idle ratio: &lt;5% of frames</li>
+    <li>Episode length: within ±50% of target</li>
+    <li>Video quality: no blurry or dark episodes</li>
+  </ul>
+</section>
+
+<hr/>
+
+<!-- MODULE 11 -->
+<section id="module11">
+  <h2>Module 11 — The Iteration Loop</h2>
+  <p>Physical AI is not a one-shot process. It's an iterative loop of collect, train, evaluate, and improve. This final module teaches you how to run that loop effectively.</p>
+
+  <h3>The Full Loop</h3>
+  <div style="background:#1e1e1e; color:#fff; padding:20px; border-radius:8px; font-family:monospace; font-size:13px; line-height:2.2;">
+    1. Design session (Module 2)<br/>
+    2. Collect data (Modules 3-5)<br/>
+    3. Curate data (Module 6)<br/>
+    4. Label data (Module 7)<br/>
+    5. Train policy (Module 9)<br/>
+    6. Evaluate in simulation<br/>
+    7. Identify failure modes<br/>
+    8. Design targeted collection to fix failures<br/>
+    9. Collect more data (targeting failures)<br/>
+    10. Retrain with augmented dataset<br/>
+    11. Deploy to real hardware (with safety layer)<br/>
+    12. Collect HIL data (human corrects real failures)<br/>
+    13. Fine-tune on HIL data<br/>
+    14. Go to step 6<br/>
+  </div>
+
+  <h3>Reading Evaluation Results</h3>
+  <p>After training, run 20 evaluation rollouts in simulation. For each failure, ask:</p>
+  <ul>
+    <li><strong>Where did it fail?</strong> — Which phase of the task? (approach, grasp, place?)</li>
+    <li><strong>Why did it fail?</strong> — Wrong position? Wrong timing? Didn't see the object?</li>
+    <li><strong>What data would fix it?</strong> — More episodes from that starting position? More variation in object placement?</li>
+  </ul>
+
+  <h3>Common Failure Patterns and Fixes</h3>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Failure Pattern</th><th>Root Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Fails from new starting positions</td><td>Not enough position coverage</td><td>Collect from 5+ different starting positions</td></tr>
+      <tr><td>Grasps but drops object</td><td>Inconsistent grasp in training data</td><td>Collect 50 episodes focused on grasp quality</td></tr>
+      <tr><td>Works in sim, fails on real hardware</td><td>Sim-to-real gap</td><td>Collect real data, add domain randomization to sim</td></tr>
+      <tr><td>Oscillates near target</td><td>Noisy training data near completion</td><td>Curate episodes more carefully, remove jitter</td></tr>
+      <tr><td>Ignores language instruction</td><td>Insufficient language diversity</td><td>Collect data with more varied task descriptions</td></tr>
+    </tbody>
+  </table>
+
+  <h3>When You're Done</h3>
+  <p>A policy is "done" when it meets your performance target consistently. Typical targets:</p>
+  <ul>
+    <li>Simple pick-and-place: 90%+ success rate in sim, 80%+ on real hardware</li>
+    <li>Multi-step manipulation: 80%+ in sim, 70%+ on real hardware</li>
+    <li>Language-conditioned: 70%+ on seen tasks, 50%+ on unseen tasks</li>
+  </ul>
+
+  <div style="background:#76B900; color:#000; padding:16px; border-radius:8px; margin:16px 0; font-weight:bold;">
+    🎓 Congratulations — you've completed the TeleOp Trainer Certification!<br/>
+    You now understand the complete Physical AI data pipeline.<br/>
+    Complete the final quiz to receive your certificate.
+  </div>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://huggingface.co/docs/lerobot/hil_data_collection" target="_blank">HuggingFace: Human-in-the-Loop Data Collection</a></li>
+    <li><a href="https://huggingface.co/blog/lerobot-datasets-v3" target="_blank">HuggingFace: LeRobot Datasets v3</a></li>
+    <li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/08-operating-so101.html" target="_blank">NVIDIA: Complete Sim-to-Real Workflow</a></li>
+  </ul>
+</section>
+
+</div>

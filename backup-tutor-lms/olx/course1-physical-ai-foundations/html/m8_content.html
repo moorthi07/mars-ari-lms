@@ -1,0 +1,103 @@
+<div class="module-content">
+  <h2>Module 8 — Sim-to-Real & The Full Loop</h2>
+  <p class="module-intro">A policy that works in simulation but fails on real hardware is useless. The sim-to-real gap is the final challenge in Physical AI. This module covers how to close it — and how to run the full iteration loop that continuously improves your robot.</p>
+
+  <hr/>
+  <h3>The Sim-to-Real Gap</h3>
+  <p>Simulation is an approximation of reality. The gap between them causes policies to fail when deployed on real hardware. Main sources:</p>
+  <table border="1" cellpadding="8" style="width:100%; border-collapse:collapse;">
+    <thead><tr style="background:#1976D2; color:white;"><th>Gap Source</th><th>What Happens</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Physics mismatch</td><td>Friction, contact, mass differ from sim</td><td>System identification, domain randomization</td></tr>
+      <tr><td>Visual mismatch</td><td>Real camera looks different from sim render</td><td>Photorealistic rendering, visual domain randomization</td></tr>
+      <tr><td>Sensor noise</td><td>Real sensors have noise; sim is perfect</td><td>Add Gaussian noise to sim observations</td></tr>
+      <tr><td>Control latency</td><td>Real hardware has delays; sim is instant</td><td>Add action delay in sim (1-3 timesteps)</td></tr>
+      <tr><td>Unmodeled dynamics</td><td>Cable drag, motor heating, wear</td><td>Collect real data to supplement sim</td></tr>
+    </tbody>
+  </table>
+
+  <hr/>
+  <h3>Domain Randomization</h3>
+  <p>
+    Domain randomization is the primary technique for closing the sim-to-real gap.
+    On every episode reset, randomize:
+  </p>
+  <ul>
+    <li>Object positions and orientations (±5cm, ±30°)</li>
+    <li>Object colors and textures</li>
+    <li>Lighting direction and intensity</li>
+    <li>Camera position (small perturbations)</li>
+    <li>Physics parameters (friction ±20%, mass ±10%)</li>
+    <li>Background textures</li>
+  </ul>
+  <p>
+    The policy trained on randomized sim data learns to be robust to variation.
+    When deployed on real hardware, the real environment is just another sample
+    from the distribution the policy was trained on.
+  </p>
+
+  <hr/>
+  <h3>Safety Layers</h3>
+  <p>Never deploy a policy directly to real hardware without safety constraints:</p>
+  <div style="background:#1e1e1e; color:#aaa; padding:16px; border-radius:8px; font-family:monospace;">
+    Policy output → Safety filter → Robot
+  </div>
+  <p>The safety filter enforces:</p>
+  <ul>
+    <li><strong>Joint limits</strong> — Clip actions to safe joint ranges</li>
+    <li><strong>Velocity limits</strong> — Cap maximum joint speed</li>
+    <li><strong>Workspace limits</strong> — Prevent end-effector from leaving safe zone</li>
+    <li><strong>Force limits</strong> — Stop if contact force exceeds threshold</li>
+    <li><strong>Emergency stop</strong> — Human override always available</li>
+  </ul>
+
+  <hr/>
+  <h3>The Full Iteration Loop</h3>
+  <p>Physical AI is not a one-shot process. It's an iterative loop:</p>
+  <div style="background:#1e1e1e; color:#fff; padding:20px; border-radius:8px; font-family:monospace; font-size:13px; line-height:2;">
+    1. Collect teleop demonstrations (50-100 episodes)<br/>
+    2. Train baseline policy (behavior cloning)<br/>
+    3. Evaluate in simulation (measure success rate)<br/>
+    4. Identify failure modes (what does it get wrong?)<br/>
+    5. Collect more data targeting failure modes<br/>
+    6. Retrain with augmented dataset<br/>
+    7. Deploy to real hardware (with safety layer)<br/>
+    8. Collect HIL data (human corrects real failures)<br/>
+    9. Fine-tune on HIL data<br/>
+    10. Repeat from step 3<br/>
+  </div>
+  <p>Each iteration targets the current policy's weakest points. After 3-5 iterations, most manipulation tasks reach 80%+ success rate.</p>
+
+  <hr/>
+  <h3>Where the Field Is Going</h3>
+  <ul>
+    <li><strong>Foundation models for robotics</strong> — Large pretrained models (like GPT for language) that can be fine-tuned for any robot task</li>
+    <li><strong>Synthetic data at scale</strong> — Generate millions of episodes in photorealistic sim, reducing real data requirements</li>
+    <li><strong>Autonomous data collection</strong> — Robots that collect their own training data with minimal human supervision</li>
+    <li><strong>Cross-embodiment transfer</strong> — Policies that work across different robot types</li>
+    <li><strong>Internet-scale pretraining</strong> — Training on human video from the internet to bootstrap robot learning</li>
+  </ul>
+
+  <hr/>
+  <h3>Course Summary — The Physical AI Loop</h3>
+  <div style="background:#0D47A1; color:#fff; padding:20px; border-radius:8px; text-align:center; font-size:16px; line-height:2.5;">
+    <strong>Robot Fundamentals</strong> → <strong>Simulation</strong> → <strong>Teleoperation</strong><br/>
+    → <strong>Dataset Engineering</strong> → <strong>Policy Learning</strong><br/>
+    → <strong>VLM/VLA</strong> → <strong>Sim-to-Real</strong> → <strong>Deploy</strong><br/>
+    ↑_______________________________________________|
+  </div>
+  <p style="text-align:center; margin-top:16px;">You now understand the complete Physical AI pipeline. Build. Break. Improve.</p>
+
+  <hr/>
+  <h3>Video: Sim-to-Real Transfer</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden;">
+    <iframe src="https://www.youtube.com/embed/videoseries?list=PLkx8KyIQkMfUmB3j-DyP58ThDXM7enA8X" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <p><em>Source: NVIDIA Isaac Lab sim-to-real tutorials (public YouTube)</em></p>
+
+  <h3>Additional Resources</h3>
+  <ul>
+    <li><a href="https://docs.nvidia.com/learning/physical-ai/sim-to-real-so-101/latest/08-operating-so101.html" target="_blank">NVIDIA: Sim-to-Real with SO-101</a></li>
+    <li><a href="https://arxiv.org/abs/2502.08844" target="_blank">MuJoCo Playground: Sim-to-Real Framework</a></li>
+  </ul>
+</div>
